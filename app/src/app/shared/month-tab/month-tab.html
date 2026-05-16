@@ -1,0 +1,342 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>NOMINA</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <mat-card class="employee-card">
+    <mat-card-header>
+      <mat-card-title>DATOS EMPLEADO</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="employee-data-grid">
+        <mat-form-field>
+          <mat-label>Nombre</mat-label>
+          <input matInput placeholder="John Doe" [(ngModel)]="employee.nombre" (input)="onInputChange()">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Nº Empleado</mat-label>
+          <input matInput type="number" placeholder="123456" [(ngModel)]="employee.nempleado" (input)="onInputChange()">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Nº Días</mat-label>
+          <input matInput type="number" [(ngModel)]="employee.ndias" (input)="onInputChange()">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Pagas Extra</mat-label>
+          <input matInput type="number" [(ngModel)]="employee.pagasextra" (input)="onInputChange()">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Horas Extra</mat-label>
+          <input matInput type="number" [(ngModel)]="employee.horasextra" (input)="onInputChange()">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>% Deducible Adeslas</mat-label>
+          <input matInput type="number" step="0.01" placeholder="0" [(ngModel)]="employee.percentajeDeducibleAdeslas" (input)="onInputChange()">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Trienios</mat-label>
+          <input matInput type="number" placeholder="1" [(ngModel)]="employee.trienios" (input)="onInputChange()">
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="cards-grid">
+    <mat-card class="small-font">
+      <mat-card-header>
+        <mat-card-title>SALARIO BASE</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-wrapper">
+          <table class="compact-table table-header">
+            <thead>
+              <tr>
+                <th>CONCEPTO</th>
+                <th>PRECIO/HORA</th>
+                <th>DEVENGOS</th>
+              </tr>
+            </thead>
+          </table>
+
+          <div class="table-body">
+            <table class="compact-table">
+              <tbody>
+                <tr *ngFor="let item of salary.items; let i = index; trackBy: trackByIndex">
+                  <td class="concept-cell">
+                      <span>{{ item.concepto }}</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        *ngIf="item.custom"
+                        (click)="$event.stopPropagation(); openFloatingEditor('salaryConcept', 'Concepto', item.concepto, 'text', i)"
+                      >
+                        ✎
+                      </button>
+                      <button mat-icon-button class="row-delete" *ngIf="item.custom" (click)="$event.stopPropagation(); deleteSalaryRow(i)">
+                        X
+                      </button>
+                    </td>
+                  <td>
+                    <div class="editable-cell" *ngIf="item.concepto !== 'Antiguedad'">
+                      <span>{{ item.precioHora | number:'1.2-2' }}</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="$event.stopPropagation(); openFloatingEditor('salaryPrecioHora', 'Precio/Hora', item.precioHora, 'number', i)"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                    <span *ngIf="item.concepto === 'Antiguedad'">{{ item.precioHora | number:'1.2-2' }}</span>
+                  </td>
+                  <td>{{ item.devengos | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <table class="compact-table table-footer">
+            <tfoot>
+              <tr>
+                <td><button mat-button (click)="addSalaryRow()">Añadir fila</button></td>
+                <td></td>
+                <td>{{ salary.totalDevengos | number:'1.2-2' }}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="small-font">
+      <mat-card-header>
+        <mat-card-title>BENEFICIOS</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-wrapper">
+          <table class="compact-table table-header">
+            <thead>
+              <tr>
+                <th>CONCEPTO</th>
+                <th>DEVENGOS</th>
+                <th>DEDUCCIONES</th>
+              </tr>
+            </thead>
+          </table>
+
+          <div class="table-body">
+            <table class="compact-table">
+              <tbody>
+                <tr *ngFor="let item of benefits.items; let i = index; trackBy: trackByIndex">
+                  <td class="concept-cell">
+                    <span>{{ item.concepto }}</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      *ngIf="item.custom"
+                      (click)="$event.stopPropagation(); openFloatingEditor('benefitConcept', 'Concepto', item.concepto, 'text', i)"
+                    >
+                      ✎
+                    </button>
+                    <button mat-icon-button class="row-delete" *ngIf="item.custom" (click)="$event.stopPropagation(); deleteBenefitRow(i)">
+                      X
+                    </button>
+                  </td>
+                  <td>
+                    <div class="editable-cell">
+                      <span>{{ item.devengos | number:'1.2-2' }}</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="$event.stopPropagation(); openFloatingEditor('benefitDevengos', 'Devengos', item.devengos, 'number', i)"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </td>
+                  <td>{{ item.devengosCalculados | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <table class="compact-table table-footer">
+            <tfoot>
+              <tr>
+                <td><button mat-button (click)="addBenefitRow()">Añadir fila</button></td>
+                <td>{{ benefits.totalDevengos | number:'1.2-2' }}</td>
+                <td>{{ benefits.totalCalculados | number:'1.2-2' }}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="small-font taxes-card">
+      <mat-card-header>
+        <mat-card-title>IMPUESTOS</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-wrapper">
+          <table class="compact-table table-header">
+            <thead>
+              <tr>
+                <th>CONCEPTO</th>
+                <th>BASE</th>
+                <th>% EMPLEADO</th>
+                <th>DEDUCCIONES EMPLEADO</th>
+                <th>% EMPRESA</th>
+                <th>EMPRESA</th>
+              </tr>
+            </thead>
+          </table>
+
+          <div class="table-body">
+            <table class="compact-table">
+              <tbody>
+                <tr *ngFor="let item of taxes.items; let i = index; trackBy: trackByIndex">
+                  <td>{{ item.concepto }}</td>
+                  <td>{{ item.base | number:'1.2-2' }}</td>
+                  <td *ngIf="item.concepto === 'IRPF' || item.concepto === 'IRPF EXTRA'">
+                    <div class="editable-cell">
+                      <span>{{ (item.concepto === 'IRPF' ? irpfPercent : irpfExtraPercent) | number:'1.2-2' }}%</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="$event.stopPropagation(); openFloatingEditor(item.concepto === 'IRPF' ? 'irpfPercent' : 'irpfExtraPercent', item.concepto === 'IRPF' ? '% Empleado IRPF' : '% Empleado IRPF EXTRA', item.concepto === 'IRPF' ? irpfPercent : irpfExtraPercent, 'number')"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="item.concepto !== 'IRPF' && item.concepto !== 'IRPF EXTRA'">{{ item.percentEmpleado | percent:'1.2-2' }}</td>
+                  <td>{{ item.deduccionesEmpleado | number:'1.2-2' }}</td>
+                  <td>{{ item.percentEmpresa | percent:'1.2-2' }}</td>
+                  <td>{{ item.empresa | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <table class="compact-table table-footer">
+            <tfoot>
+              <tr>
+                <td>TOTAL</td>
+                <td></td>
+                <td>{{ taxes.totalPercentEmpleado | percent:'1.2-2' }}</td>
+                <td>{{ taxes.totalDeduccionesEmpleado | number:'1.2-2' }}</td>
+                <td>{{ taxes.totalPercentEmpresa | percent:'1.2-2' }}</td>
+                <td>{{ taxes.totalEmpresa | number:'1.2-2' }}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="results-cards-grid">
+    <mat-card class="results-card">
+      <mat-card-header>
+        <mat-card-title>RESUMEN SEMANAL</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <table class="compact-table">
+          <thead>
+            <tr>
+              <th>CONCEPTO</th>
+              <th>BASE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bruto</td>
+              <td>{{ resumenMensual.bruto | number:'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Deducciones</td>
+              <td>{{ resumenMensual.deducciones | number:'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Neto</td>
+              <td>{{ resumenMensual.neto | number:'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Prorrata Extras</td>
+              <td>{{ resumenMensual.prorrataExtras | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="results-card">
+      <mat-card-header>
+        <mat-card-title>ACUMULADO</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <table class="compact-table acumulado-table">
+          <thead>
+            <tr>
+              <th>CONCEPTO</th>
+              <th>CALCULOS</th>
+              <th>TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of acumuladoRows; trackBy: trackByIndex">
+              <td>{{ row.concepto }}</td>
+              <td>{{ row.calculos | number:'1.2-2' }}</td>
+              <td>{{ row.total | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="results-card">
+      <mat-card-header>
+        <mat-card-title>PARTICIONES</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="pie-chart-wrap" *ngIf="particionesTotal > 0; else emptyPieState">
+          <svg class="pie-chart" viewBox="0 0 200 200" role="img" aria-label="Grafico de particiones acumuladas">
+            <path
+              *ngFor="let slice of particionesSlices; trackBy: trackByIndex"
+              [attr.d]="slice.path"
+              [attr.fill]="slice.color"
+            >
+              <title>{{ slice.label }}: {{ slice.value | number:'1.2-2' }} ({{ slice.percentage | number:'1.2-2' }}%)</title>
+            </path>
+          </svg>
+
+          <div class="pie-legend">
+            <div class="pie-legend-row" *ngFor="let slice of particionesSlices; trackBy: trackByIndex">
+              <span class="pie-dot" [style.background]="slice.color"></span>
+              <span class="pie-label">{{ slice.label }}</span>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyPieState>
+          <p class="pie-empty">Sin datos para representar.</p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="floating-editor-overlay" *ngIf="floatingEditor.isOpen" (click)="closeFloatingEditor()"></div>
+  <div class="floating-editor-panel" *ngIf="floatingEditor.isOpen" (click)="$event.stopPropagation()">
+    <button mat-icon-button class="floating-editor-save" (click)="saveFloatingEditor()">✓</button>
+    <div class="floating-editor-label">{{ floatingEditor.label }}</div>
+    <input
+      class="floating-editor-input"
+      [type]="floatingEditor.inputType"
+      [step]="floatingEditor.inputType === 'number' ? '0.01' : null"
+      [(ngModel)]="floatingEditor.value"
+      (keydown.enter)="saveFloatingEditor()"
+    >
+  </div>
+
+</mat-expansion-panel>

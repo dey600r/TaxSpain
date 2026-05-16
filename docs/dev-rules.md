@@ -1,0 +1,39 @@
+# Reglas de desarrollo
+
+## Arquitectura
+- Separar lógica de negocio de la UI
+- Usar funciones puras para cálculos
+- Centralizar cálculos en servicios de angular en /core/services
+    - Calculos de las tab de los meses de cada nomina se guardan dentro de /core/services/month-form.service.ts
+    - Calculos de la tab de IRPF se guardan dentro de /core/services/irpf-form.service.ts
+    - Calculos de la tab de inversiones se guardan dentro de /core/services/investment-form.service.ts
+- Cada dto o model debe estar en un archivo separado en la carpeta /core/models
+- No usar cadenas de caracteres fijas, utilizar siempre constantes en la carpeta /core/utils/constants.ts
+- Los componentes que se usen como compartidos entre componentes que se creen en la carpeta de /shared
+- Las paginas deben ir en la carpeta /pages
+
+## Estilo de código
+- Usar Angular 21
+- Nombres descriptivos (no abreviaturas)
+- Evitar duplicación de lógica
+
+## Estilos
+- Utilizar Angular material
+- Utilizar el tema blue de angular material
+- Utilizar fondo claro y card y tabs en gris claro
+- Las cards deben estar separadas por unos 20 px
+
+## Validaciones
+- Validar todos los inputs numéricos
+- Manejar errores explícitamente
+
+## Integración con lógica (Excel)
+- Las fórmulas deben replicar exactamente los siguientes ficheros:
+    - 0-req-global-rules.md: Contexto transversal de la aplicacion
+    - 1-req-nominas-rules.md: Contexto de la lógica de las nominas de cada mas
+- No simplificar cálculos sin validar
+
+## Comportamiento esperado de la IA
+- Explicar antes de hacer cambios grandes
+- No asumir valores por defecto sin indicarlo
+- Debe ir actualizando el funcional en los archivos .md automaticamente a la vez que el código para estar siempre sincronizado
