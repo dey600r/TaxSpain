@@ -281,6 +281,76 @@ mat-form-field .mat-input-element {
   color: rgba(0, 0, 0, 0.6);
 }
 
+.duplicate-trigger {
+  margin-left: 15px;
+  font-size: 0.78rem;
+}
+
+.duplicate-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.duplicate-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  width: min(360px, calc(100vw - 32px));
+  padding: 16px;
+  z-index: 1001;
+}
+
+.duplicate-save {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  padding: 0;
+  line-height: 1;
+  font-size: 0.95rem;
+  border-radius: 50%;
+  border: none;
+  background: #1f8f3a;
+  color: #fff;
+}
+
+.duplicate-title {
+  margin-right: 38px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.duplicate-label {
+  display: block;
+  font-size: 0.76rem;
+  color: rgba(0, 0, 0, 0.68);
+  margin-bottom: 6px;
+}
+
+.duplicate-select {
+  width: 100%;
+  height: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 0.88rem;
+  box-sizing: border-box;
+  background: #fff;
+}
+
 @media (max-width: 900px) {
   .results-cards-grid {
     grid-template-columns: 1fr;

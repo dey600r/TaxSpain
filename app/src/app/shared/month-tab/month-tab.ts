@@ -27,6 +27,12 @@ import { EmployeeData, SalaryData, SalaryItem, BenefitsData, BenefitItem, TaxesD
 })
 export class MonthTabComponent implements OnInit {
   @Input() monthName!: string;
+  isNominaOpen = false;
+
+  duplicatePanel = {
+    isOpen: false,
+    sourceMonth: TAX_CONSTANTS.MONTHS[0]
+  };
 
   acumuladoRows = [
     { concepto: 'Imponible IRPF', calculos: 0, total: 0 },
@@ -238,6 +244,47 @@ export class MonthTabComponent implements OnInit {
 
     this.closeFloatingEditor();
     this.onInputChange();
+  }
+
+  openDuplicatePanel() {
+    const firstAvailable = TAX_CONSTANTS.MONTHS.find(month => month !== this.monthName);
+    this.duplicatePanel = {
+      isOpen: true,
+      sourceMonth: firstAvailable ?? this.monthName
+    };
+  }
+
+  closeDuplicatePanel() {
+    this.duplicatePanel.isOpen = false;
+  }
+
+  applyDuplicateData() {
+    if (!this.isBrowser) {
+      this.closeDuplicatePanel();
+      return;
+    }
+
+    if (!this.duplicatePanel.sourceMonth || this.duplicatePanel.sourceMonth === this.monthName) {
+      this.closeDuplicatePanel();
+      return;
+    }
+
+    const sourceKey = `month-tab-state-${this.duplicatePanel.sourceMonth}`;
+    const saved = window.localStorage.getItem(sourceKey);
+    if (!saved) {
+      this.closeDuplicatePanel();
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(saved) as StoredMonthState;
+      this.applyStoredState(parsed);
+      this.calculateAll();
+    } catch {
+      // ignore invalid source month state
+    }
+
+    this.closeDuplicatePanel();
   }
 
   private recalculateResumenMensual() {
@@ -463,6 +510,42 @@ export class MonthTabComponent implements OnInit {
     return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
   }
 
+  get monthOptions(): string[] {
+    return TAX_CONSTANTS.MONTHS;
+  }
+
+  private applyStoredState(parsed: StoredMonthState) {
+    if (parsed.employee) {
+      this.employee = parsed.employee;
+    }
+
+    if (parsed.salary?.items) {
+      this.salary.items = parsed.salary.items.map(savedItem => ({
+        concepto: savedItem.concepto ?? 'Nuevo',
+        precioHora: savedItem.concepto === 'Antiguedad' ? 0 : (savedItem.precioHora ?? 0),
+        devengos: 0,
+        custom: savedItem.custom
+      }));
+    }
+
+    if (parsed.benefits?.items) {
+      this.benefits.items = parsed.benefits.items.map(savedItem => ({
+        concepto: savedItem.concepto ?? 'Nuevo',
+        devengos: savedItem.devengos ?? 0,
+        devengosCalculados: 0,
+        custom: savedItem.custom
+      }));
+    }
+
+    if (typeof parsed.irpfPercent === 'number') {
+      this.irpfPercent = parsed.irpfPercent;
+    }
+
+    if (typeof parsed.irpfExtraPercent === 'number') {
+      this.irpfExtraPercent = parsed.irpfExtraPercent;
+    }
+  }
+
   private loadState() {
     if (!this.isBrowser) {
       return;
@@ -474,43 +557,8 @@ export class MonthTabComponent implements OnInit {
         return;
       }
 
-      const parsed = JSON.parse(saved) as {
-        employee?: EmployeeData;
-        salary?: { items: Array<Partial<SalaryItem> & { custom?: boolean }> };
-        benefits?: { items: Array<Partial<BenefitItem> & { custom?: boolean }> };
-        irpfPercent?: number;
-        irpfExtraPercent?: number;
-      };
-
-      if (parsed.employee) {
-        this.employee = parsed.employee;
-      }
-
-      if (parsed.salary?.items) {
-        this.salary.items = parsed.salary.items.map(savedItem => ({
-          concepto: savedItem.concepto ?? 'Nuevo',
-          precioHora: savedItem.concepto === 'Antiguedad' ? 0 : (savedItem.precioHora ?? 0),
-          devengos: 0,
-          custom: savedItem.custom
-        }));
-      }
-
-      if (parsed.benefits?.items) {
-        this.benefits.items = parsed.benefits.items.map(savedItem => ({
-          concepto: savedItem.concepto ?? 'Nuevo',
-          devengos: savedItem.devengos ?? 0,
-          devengosCalculados: 0,
-          custom: savedItem.custom
-        }));
-      }
-
-      if (typeof parsed.irpfPercent === 'number') {
-        this.irpfPercent = parsed.irpfPercent;
-      }
-
-      if (typeof parsed.irpfExtraPercent === 'number') {
-        this.irpfExtraPercent = parsed.irpfExtraPercent;
-      }
+      const parsed = JSON.parse(saved) as StoredMonthState;
+      this.applyStoredState(parsed);
     } catch {
       // ignore invalid stored state
     }
@@ -547,3 +595,11 @@ export class MonthTabComponent implements OnInit {
     }
   }
 }
+
+type StoredMonthState = {
+  employee?: EmployeeData;
+  salary?: { items: Array<Partial<SalaryItem> & { custom?: boolean }> };
+  benefits?: { items: Array<Partial<BenefitItem> & { custom?: boolean }> };
+  irpfPercent?: number;
+  irpfExtraPercent?: number;
+};

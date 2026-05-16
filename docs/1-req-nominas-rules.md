@@ -24,9 +24,11 @@ A continuación las 14 secciones:
 
 Se deben crear el layout principal horizontal que se puedan colapsar con un boton en el que incluyan el contenido siguiente:
 - `Nomina`: Debe contener los calculos de la nómina por tanto todos los input siguientes:
-    - CARD: DATOS EMPLEADO
-    - CARD: SALARIO BASE, BENEFICIOS e IMPUESTOS (en paralelo en la misma fila)
-    - CARD: RESUMEN SEMANAL y ACUMULADO (en paralelo en la misma fila)
+    - BOTON DUPLICAR DATOS: Debe haber un boton con un icono de "DUPLICAR" a la derecha del titulo `Nomina` que abra un panel con un desplegable de los meses y las 2 extra. Además en la esquina superior izquierda del panel un check para guardar los datos. Cuando se pulse el boton check, se debe cerrar el panel y copiar todos los datos inputs del mes elegido en el desplegable del panel. 
+    - CARDS:
+        - CARD: DATOS EMPLEADO
+        - CARD: SALARIO BASE, BENEFICIOS e IMPUESTOS (en paralelo en la misma fila)
+        - CARD: RESUMEN SEMANAL y ACUMULADO (en paralelo en la misma fila)
 
 
 #### 1.1.1 CARD: `DATOS EMPLEADO`

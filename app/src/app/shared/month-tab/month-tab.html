@@ -1,6 +1,18 @@
-<mat-expansion-panel>
+<mat-expansion-panel (opened)="isNominaOpen = true" (closed)="isNominaOpen = false">
   <mat-expansion-panel-header>
-    <mat-panel-title>NOMINA</mat-panel-title>
+    <mat-panel-title>
+      NOMINA
+      <button
+        *ngIf="isNominaOpen"
+        mat-icon-button
+        class="inline-edit duplicate-trigger"
+        (click)="$event.stopPropagation(); openDuplicatePanel()"
+        aria-label="Duplicar datos"
+        title="Duplicar datos"
+      >
+        ⧉
+      </button>
+    </mat-panel-title>
   </mat-expansion-panel-header>
 
   <mat-card class="employee-card">
@@ -324,6 +336,20 @@
         </ng-template>
       </mat-card-content>
     </mat-card>
+  </div>
+
+  <div class="duplicate-overlay" *ngIf="duplicatePanel.isOpen" (click)="closeDuplicatePanel()"></div>
+  <div class="duplicate-panel" *ngIf="duplicatePanel.isOpen" (click)="$event.stopPropagation()">
+    <button mat-icon-button class="duplicate-save" (click)="applyDuplicateData()">✓</button>
+    <div class="duplicate-title">Duplicar Datos Desde</div>
+    <label class="duplicate-label" for="duplicate-month-select">Mes origen</label>
+    <select
+      id="duplicate-month-select"
+      class="duplicate-select"
+      [(ngModel)]="duplicatePanel.sourceMonth"
+    >
+      <option *ngFor="let month of monthOptions" [value]="month" [disabled]="month === monthName">{{ month }}</option>
+    </select>
   </div>
 
   <div class="floating-editor-overlay" *ngIf="floatingEditor.isOpen" (click)="closeFloatingEditor()"></div>
