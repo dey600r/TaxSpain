@@ -39,7 +39,7 @@ Panel con inputs que deben tener el label dentro del input. Los input deben esta
 3 - Label: `Nº Días` -> Input numero -> Valor por defecto: 30
 4 - Label: `Pagas Extra` -> Input numero -> Valor por defecto: 2
 5 - Label: `Horas Extra` -> Input numero -> Valor por defecto: 0
-6 - Label: `% Deducible Adeslas` -> Input decimal -> Valor por defecto vacio -> Placeholder 0
+6 - Label: `% Deducible Seguro Medico` -> Input decimal -> Valor por defecto vacio -> Placeholder 0
 7 - Label: `Trienios` -> Input numero -> Valor por defecto vacio -> Placeholder 1
 
 #### 1.1.2 CARD: `NOMINA`
@@ -87,13 +87,13 @@ X - Fila fija al final con el cálculo automático de sumatorio de toda la colum
 
 ##### 1.1.2.2 TABLA `BENEFICIOS`
 
-Conceptos: Adeslas, Tickets, Seguro Vida.
+Conceptos: Seguro Medico, Tickets, Seguro Vida.
 
 Tabla con 3 columnas:
 
 COLUMNA 1 (no editable) -> `CONCEPTO`
 FILAS FIJAS
-1 - Label: `Adeslas`
+1 - Label: `Seguro Medico`
 2 - Label: `Tickets` 
 3 - Label: `Seguro Vida`
 FILAS ADICIONALES
@@ -102,7 +102,7 @@ X - Fila fija al final con el cálculo de sumatorio de la columna (no editable).
 
 COLUMNA 2 (editable) -> `DEVENGOS`
 FILAS FIJAS
-1 - Adeslas -> Input decimal -> Valor por defecto -41,67
+1 - Seguro Medico -> Input decimal -> Valor por defecto -41,67
 2 - Tickets -> Input decimal -> Valor por defecto 48
 3 - Seguro Vida -> Input decimal -> Valor por defecto 7,78
 FILAS ADICIONALES
@@ -111,7 +111,7 @@ X - Fila fija al final con el cálculo automático del sumatorio de todos los va
 
 COLUMNA 3 (no editable) -> `DEDUCCIONES`
 FILAS FIJAS - Se calculan automaticamente porque no son editables
-1 - Adeslas -> Calculo automático: (Adeslas * `% Deducible Adeslas`) / 100
+1 - Seguro Medico -> Calculo automático: (Seguro Medico * `% Deducible Seguro Medico`) / 100
 2 - Tickets -> Calculo automático: Mismo valor que `Tickets` (COLUMNA 2)
 3 - Seguro Vida -> Calculo automático: Mismo valor que `Seguro Vida` (COLUMNA 2)
 FILAS ADICIONALES
@@ -140,14 +140,14 @@ FILAS ADICIONALES: Separadas por una fila
 
 COLUMNA 2 (no editable) -> `BASE`
 FILAS FIJAS - Se calculan automaticamente porque no son editables
-1 - Desempleo -> Calculo automatico: (TOTAL COLUMNA 3 TABLA SALARIO BASE + TOTAL COLUMNA 2 TABLA BENEFICIOS) - COLUMNA 2 (ADESLAS) TABLA BENEFICIOS + PRORATA EXTRAS COLUMNA 2 TABLA RESUMEN RESULTADOS
+1 - Desempleo -> Calculo automatico: (TOTAL COLUMNA 3 TABLA SALARIO BASE + TOTAL COLUMNA 2 TABLA BENEFICIOS) - COLUMNA 2 (SEGURO MEDICO) TABLA BENEFICIOS + PRORATA EXTRAS COLUMNA 2 TABLA RESUMEN RESULTADOS
 2 - Formacion Profesional -> Calculo automático: mismo valor que Desempleo
 3 - Contingencias Comunes -> Calculo automático: mismo valor que Desempleo
 4 - MEI -> Calculo automático: mismo valor que Desempleo
 5 - FOGASA -> Calculo automático: mismo valor que Desempleo
 6 - AT/PE -> Calculo automático: mismo valor que Desempleo
 FILAS ADICIONALES
-7 - IRPF -> Calculo automático: (TOTAL COLUMNA 3 TABLA SALARIO BASE + ADESLAS COLUMNA 2 TABLA BENEFICIOS)
+7 - IRPF -> Calculo automático: (TOTAL COLUMNA 3 TABLA SALARIO BASE + SEGURO MEDICO COLUMNA 2 TABLA BENEFICIOS)
 8 - IRPF EXTRA -> Mismo valor que el IRPF
 9 - TOTAL Fila fija al final: vacio
 

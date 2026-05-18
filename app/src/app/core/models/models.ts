@@ -6,7 +6,7 @@ export interface EmployeeData {
   ndias: number;
   pagasextra: number;
   horasextra: number;
-  percentajeDeducibleAdeslas: number | null;
+  percentajeDeducibleSeguroMedico: number | null;
   trienios: number | null;
 }
 

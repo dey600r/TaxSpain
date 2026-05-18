@@ -73,7 +73,7 @@ export class MonthTabComponent implements OnInit {
     ndias: TAX_CONSTANTS.DEFAULTS.N_DIAS,
     pagasextra: TAX_CONSTANTS.DEFAULTS.PAGAS_EXTRA,
     horasextra: TAX_CONSTANTS.DEFAULTS.HORAS_EXTRA,
-    percentajeDeducibleAdeslas: TAX_CONSTANTS.DEFAULTS.PERCENT_DEDUCIBLE_ADESLAS,
+    percentajeDeducibleSeguroMedico: TAX_CONSTANTS.DEFAULTS.PERCENT_DEDUCIBLE_SEGURO_MEDICO,
     trienios: TAX_CONSTANTS.DEFAULTS.TRIENIOS
   };
 
@@ -92,7 +92,7 @@ export class MonthTabComponent implements OnInit {
 
   benefits: BenefitsData = {
     items: [
-      { concepto: 'Adeslas', devengos: TAX_CONSTANTS.DEFAULTS.ADESLAS, devengosCalculados: 0 },
+      { concepto: 'Seguro Medico', devengos: TAX_CONSTANTS.DEFAULTS.SEGURO_MEDICO, devengosCalculados: 0 },
       { concepto: 'Tickets', devengos: TAX_CONSTANTS.DEFAULTS.TICKETS, devengosCalculados: 0 },
       { concepto: 'Seguro Vida', devengos: TAX_CONSTANTS.DEFAULTS.SEGURO_VIDA, devengosCalculados: 0 }
     ],
@@ -336,10 +336,10 @@ export class MonthTabComponent implements OnInit {
 
   private recalculateParticiones() {
     const source = [
-      { label: 'Retenciones IRPF', row: this.acumuladoRows.find(r => r.concepto === 'Retenciones IRPF'), color: '#d1495b' },
-      { label: 'Cotizacion SS Empleado', row: this.acumuladoRows.find(r => r.concepto === 'Cotizacion SS Empleado'), color: '#edae49' },
-      { label: 'Cotizacion SS Empresa', row: this.acumuladoRows.find(r => r.concepto === 'Cotizacion SS Empresa'), color: '#00798c' },
-      { label: 'Recibido (Neto)', row: this.acumuladoRows.find(r => r.concepto === 'Recibido'), color: '#2a9d8f' }
+      { label: 'Retenciones IRPF', row: this.acumuladoRows.find(r => r.concepto === 'Retenciones IRPF'), color: 'var(--mat-sys-error)' },
+      { label: 'Cotizacion SS Empleado', row: this.acumuladoRows.find(r => r.concepto === 'Cotizacion SS Empleado'), color: 'var(--mat-sys-inverse-primary)' },
+      { label: 'Cotizacion SS Empresa', row: this.acumuladoRows.find(r => r.concepto === 'Cotizacion SS Empresa'), color: 'var(--mat-sys-primary-fixed)' },
+      { label: 'Recibido (Neto)', row: this.acumuladoRows.find(r => r.concepto === 'Recibido'), color: 'var(--mat-sys-primary)' }
     ];
 
     const normalized = source.map(item => ({

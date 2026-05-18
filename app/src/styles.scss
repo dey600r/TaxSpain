@@ -5,12 +5,12 @@
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+@use './assets/color-pallete';
 
 html {
   @include mat.theme((
     color: (
-      primary: mat.$blue-palette,
-      tertiary: mat.$blue-palette,
+      theme-type: light,
     ),
     typography: Roboto,
     density: 0,
@@ -29,6 +29,7 @@ body {
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
+  min-height: 100vh;
 
   // Reset the user agent margin.
   margin: 0;
@@ -36,4 +37,22 @@ body {
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+mat-card,
+mat-expansion-panel {
+  background-color: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-on-surface);
+}
+
+mat-expansion-panel-header,
+mat-card-header {
+  color: var(--mat-sys-on-surface);
+}
+
+.mat-expansion-panel {
+  border: 1px solid var(--mat-sys-outline-variant);
+}

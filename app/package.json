@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:pages": "ng build --configuration production --base-href /TaxSpain/",
+    "deploy:pages": "npm run build:pages && npx angular-cli-ghpages --dir=dist/app/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:app": "node dist/app/server/server.mjs"
@@ -41,6 +43,7 @@
     "@angular/build": "^20.3.4",
     "@angular/cli": "^20.3.4",
     "@angular/compiler-cli": "^20.3.0",
+    "angular-cli-ghpages": "^2.0.3",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",

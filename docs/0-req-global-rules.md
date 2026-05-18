@@ -11,9 +11,9 @@ Modelo de datos sugerido:
 INPUTS USUARIOS
 - `year`: array object
     - `month`: array object (14)
-        - `empleado`: { nombre, nempleado, ndias, pagasextra, horasextra, percentajeDeducibleAdeslas, trienios } array creciente
+        - `empleado`: { nombre, nempleado, ndias, pagasextra, horasextra, percentajeDeducibleSeguroMedico, trienios } array creciente
         - `salario`: { sueldoBase, antiguedad, plusConvenio, plusVoluntario, pactoNoCompetencia, dedicacionPlena } array creciente
-        - `beneficios`: { adeslas, tickets, seguroVida } array creciente
+        - `beneficios`: { seguroMedico, tickets, seguroVida } array creciente
         - `impuestos`: { irpf}
 
 ---

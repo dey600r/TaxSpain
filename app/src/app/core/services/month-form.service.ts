@@ -42,13 +42,13 @@ export class MonthFormService {
 
   // Calcular beneficios
   calculateBenefits(benefits: BenefitsData, employee: EmployeeData): BenefitsData {
-    const percentajeDeducibleAdeslas = employee.percentajeDeducibleAdeslas ?? 0;
+    const percentajeDeducibleSeguroMedico = employee.percentajeDeducibleSeguroMedico ?? 0;
 
     const updatedItems = benefits.items.map(item => {
-      if (item.concepto === 'Adeslas') {
+      if (item.concepto === 'Seguro Medico') {
         return {
           ...item,
-          devengosCalculados: Math.abs(item.devengos * percentajeDeducibleAdeslas) / 100
+          devengosCalculados: Math.abs(item.devengos * percentajeDeducibleSeguroMedico) / 100
         };
       } else {
         return {
@@ -81,10 +81,10 @@ export class MonthFormService {
     const baseSalary = salary.totalDevengos;
     // BASE SS debe usar la COLUMNA 2 (devengos) de BENEFICIOS.
     const totalBeneficiosColumna2 = benefits.items.reduce((sum, item) => sum + item.devengos, 0);
-    const adeslas = benefits.items.find(b => b.concepto === 'Adeslas')?.devengos || 0;
+    const seguroMedico = benefits.items.find(b => b.concepto === 'Seguro Medico')?.devengos || 0;
     const prorrataExtras = (baseSalary * employee.pagasextra) / 12;
-    const baseSS = baseSalary + totalBeneficiosColumna2 - adeslas + prorrataExtras;
-    const baseIRPF = baseSalary + adeslas;
+    const baseSS = baseSalary + totalBeneficiosColumna2 - seguroMedico + prorrataExtras;
+    const baseIRPF = baseSalary + seguroMedico;
 
     const items: TaxItem[] = [
       {

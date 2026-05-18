@@ -50,6 +50,15 @@ mat-form-field .mat-input-element {
   height: 36px;
 }
 
+.compact-table th {
+  background-color: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface);
+}
+
+.compact-table td {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
 .compact-table th:nth-child(2),
 .compact-table td:nth-child(2),
 .compact-table th:nth-child(3),
@@ -88,8 +97,8 @@ mat-form-field .mat-input-element {
   line-height: 20px;
   border-radius: 50%;
   border: none;
-  background: rgba(0, 0, 0, 0.06);
-  color: rgba(0, 0, 0, 0.8);
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
 }
 
 /* Scrollable table bodies with fixed footer */
@@ -142,8 +151,8 @@ mat-form-field .mat-input-element {
   line-height: 20px;
   border-radius: 50%;
   border: none;
-  background: rgba(0,0,0,0.06);
-  color: rgba(0,0,0,0.75);
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -185,6 +194,12 @@ mat-form-field .mat-input-element {
 
 .small-font mat-form-field {
   font-size: 0.875rem;
+}
+
+.employee-card mat-card-title,
+.cards-grid mat-card-title,
+.results-cards-grid mat-card-title {
+  padding-bottom: 10px;
 }
 
 /* Narrow concept column in IMPUESTOS to improve visibility of numeric columns */
@@ -278,7 +293,7 @@ mat-form-field .mat-input-element {
 .pie-empty {
   margin: 0;
   font-size: 0.85rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .duplicate-trigger {
@@ -289,7 +304,7 @@ mat-form-field .mat-input-element {
 .duplicate-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: color-mix(in srgb, var(--mat-sys-scrim) 20%, transparent);
   z-index: 1000;
 }
 
@@ -298,10 +313,10 @@ mat-form-field .mat-input-element {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: var(--mat-sys-surface-container-lowest);
+  border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 10px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--mat-sys-shadow) 20%, transparent);
   width: min(360px, calc(100vw - 32px));
   padding: 16px;
   z-index: 1001;
@@ -322,8 +337,8 @@ mat-form-field .mat-input-element {
   font-size: 0.95rem;
   border-radius: 50%;
   border: none;
-  background: #1f8f3a;
-  color: #fff;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
 }
 
 .duplicate-title {
@@ -336,19 +351,20 @@ mat-form-field .mat-input-element {
 .duplicate-label {
   display: block;
   font-size: 0.76rem;
-  color: rgba(0, 0, 0, 0.68);
+  color: var(--mat-sys-on-surface-variant);
   margin-bottom: 6px;
 }
 
 .duplicate-select {
   width: 100%;
   height: 36px;
-  border: 1px solid rgba(0, 0, 0, 0.24);
+  border: 1px solid var(--mat-sys-outline);
   border-radius: 8px;
   padding: 0 10px;
   font-size: 0.88rem;
   box-sizing: border-box;
-  background: #fff;
+  background: var(--mat-sys-surface-container-lowest);
+  color: var(--mat-sys-on-surface);
 }
 
 @media (max-width: 900px) {
@@ -369,7 +385,7 @@ mat-form-field .mat-input-element {
 .floating-editor-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: color-mix(in srgb, var(--mat-sys-scrim) 20%, transparent);
   z-index: 1000;
 }
 
@@ -378,10 +394,10 @@ mat-form-field .mat-input-element {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: var(--mat-sys-surface-container-lowest);
+  border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 10px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--mat-sys-shadow) 20%, transparent);
   width: min(340px, calc(100vw - 32px));
   padding: 14px;
   z-index: 1001;
@@ -402,8 +418,8 @@ mat-form-field .mat-input-element {
   font-size: 0.95rem;
   border-radius: 50%;
   border: none;
-  background: #1f8f3a;
-  color: #fff;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
 }
 
 .floating-editor-label {
@@ -415,9 +431,11 @@ mat-form-field .mat-input-element {
 .floating-editor-input {
   width: 100%;
   height: 36px;
-  border: 1px solid rgba(0, 0, 0, 0.24);
+  border: 1px solid var(--mat-sys-outline);
   border-radius: 8px;
   padding: 0 10px;
   font-size: 0.88rem;
   box-sizing: border-box;
+  background: var(--mat-sys-surface-container-lowest);
+  color: var(--mat-sys-on-surface);
 }
