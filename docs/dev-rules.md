@@ -22,10 +22,12 @@
 - Utilizar el tema blue de angular material
 - Utilizar fondo claro y card y tabs en gris claro
 - Las cards deben estar separadas por unos 20 px
+- En Resumen > Configuracion Renta y Renta, los titulos de las cards Seguridad Social y Resumen de nominas deben llevar padding-bottom de 10px para separarlos de la tabla
 
 ## Validaciones
 - Validar todos los inputs numéricos
 - Manejar errores explícitamente
+- En tablas, todos los campos editables deben mostrarse con valor + icono de lapicero a la derecha, y la edición debe hacerse en un panel flotante (no con input inline).
 
 ## Integración con lógica (Excel)
 - Las fórmulas deben replicar exactamente los siguientes ficheros:

@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MonthTabComponent } from '../../shared/month-tab/month-tab';
+import { IrpfSummaryTabComponent } from '../../shared/irpf-summary-tab/irpf-summary-tab';
 import { TAX_CONSTANTS } from '../../core/utils/constants';
 
 @Component({
@@ -23,7 +24,8 @@ import { TAX_CONSTANTS } from '../../core/utils/constants';
     MatInputModule,
     MatButtonModule,
     FormsModule,
-    MonthTabComponent
+    MonthTabComponent,
+    IrpfSummaryTabComponent
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],

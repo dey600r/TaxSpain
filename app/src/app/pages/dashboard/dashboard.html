@@ -6,5 +6,12 @@
       </mat-expansion-panel-header>
       <app-month-tab [monthName]="month"></app-month-tab>
     </mat-expansion-panel>
+
+    <mat-expansion-panel (opened)="summaryTab.refreshSummary()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Resumen</mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-irpf-summary-tab #summaryTab></app-irpf-summary-tab>
+    </mat-expansion-panel>
   </mat-accordion>
 </div>

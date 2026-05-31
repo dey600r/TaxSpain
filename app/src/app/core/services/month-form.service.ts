@@ -2,6 +2,44 @@ import { Injectable } from '@angular/core';
 import { TAX_CONSTANTS } from '../utils/constants';
 import { EmployeeData, SalaryData, SalaryItem, BenefitsData, BenefitItem, TaxesData, TaxItem } from '../models/models';
 
+export type SocialSecurityPercentages = {
+  employee: {
+    desempleo: number;
+    formacionProfesional: number;
+    contingenciasComunes: number;
+    mei: number;
+    fogasa: number;
+    atPe: number;
+  };
+  company: {
+    desempleo: number;
+    formacionProfesional: number;
+    contingenciasComunes: number;
+    mei: number;
+    fogasa: number;
+    atPe: number;
+  };
+};
+
+export const DEFAULT_SOCIAL_SECURITY_PERCENTAGES: SocialSecurityPercentages = {
+  employee: {
+    desempleo: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.DESEMPLEO,
+    formacionProfesional: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.FORMACION_PROFESIONAL,
+    contingenciasComunes: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.CONTINGENCIAS_COMUNES,
+    mei: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.MEI,
+    fogasa: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.FOGASA,
+    atPe: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.AT_PE,
+  },
+  company: {
+    desempleo: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.DESEMPLEO,
+    formacionProfesional: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.FORMACION_PROFESIONAL,
+    contingenciasComunes: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.CONTINGENCIAS_COMUNES,
+    mei: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.MEI,
+    fogasa: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.FOGASA,
+    atPe: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.AT_PE,
+  }
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -76,7 +114,8 @@ export class MonthFormService {
     employee: EmployeeData,
     irpfPercent: number,
     irpfExtraPercent: number,
-    isExtra: boolean
+    isExtra: boolean,
+    socialSecurityPercentages: SocialSecurityPercentages = DEFAULT_SOCIAL_SECURITY_PERCENTAGES
   ): TaxesData {
     const baseSalary = salary.totalDevengos;
     // BASE SS debe usar la COLUMNA 2 (devengos) de BENEFICIOS.
@@ -90,49 +129,49 @@ export class MonthFormService {
       {
         concepto: 'Desempleo',
         base: isExtra ? 0 : baseSS,
-        percentEmpleado: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.DESEMPLEO,
+        percentEmpleado: socialSecurityPercentages.employee.desempleo,
         deduccionesEmpleado: 0,
-        percentEmpresa: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.DESEMPLEO,
+        percentEmpresa: socialSecurityPercentages.company.desempleo,
         empresa: 0
       },
       {
         concepto: 'Formacion Profesional',
         base: isExtra ? 0 : baseSS,
-        percentEmpleado: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.FORMACION_PROFESIONAL,
+        percentEmpleado: socialSecurityPercentages.employee.formacionProfesional,
         deduccionesEmpleado: 0,
-        percentEmpresa: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.FORMACION_PROFESIONAL,
+        percentEmpresa: socialSecurityPercentages.company.formacionProfesional,
         empresa: 0
       },
       {
         concepto: 'Contingencias Comunes',
         base: isExtra ? 0 : baseSS,
-        percentEmpleado: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.CONTINGENCIAS_COMUNES,
+        percentEmpleado: socialSecurityPercentages.employee.contingenciasComunes,
         deduccionesEmpleado: 0,
-        percentEmpresa: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.CONTINGENCIAS_COMUNES,
+        percentEmpresa: socialSecurityPercentages.company.contingenciasComunes,
         empresa: 0
       },
       {
         concepto: 'MEI',
         base: isExtra ? 0 : baseSS,
-        percentEmpleado: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.MEI,
+        percentEmpleado: socialSecurityPercentages.employee.mei,
         deduccionesEmpleado: 0,
-        percentEmpresa: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.MEI,
+        percentEmpresa: socialSecurityPercentages.company.mei,
         empresa: 0
       },
       {
         concepto: 'FOGASA',
         base: isExtra ? 0 : baseSS,
-        percentEmpleado: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.FOGASA,
+        percentEmpleado: socialSecurityPercentages.employee.fogasa,
         deduccionesEmpleado: 0,
-        percentEmpresa: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.FOGASA,
+        percentEmpresa: socialSecurityPercentages.company.fogasa,
         empresa: 0
       },
       {
         concepto: 'AT/PE',
         base: isExtra ? 0 : baseSS,
-        percentEmpleado: TAX_CONSTANTS.SS_EMPLOYEE_PERCENTAGES.AT_PE,
+        percentEmpleado: socialSecurityPercentages.employee.atPe,
         deduccionesEmpleado: 0,
-        percentEmpresa: TAX_CONSTANTS.SS_COMPANY_PERCENTAGES.AT_PE,
+        percentEmpresa: socialSecurityPercentages.company.atPe,
         empresa: 0
       },
       {

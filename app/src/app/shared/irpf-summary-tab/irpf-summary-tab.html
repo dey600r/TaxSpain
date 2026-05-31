@@ -1,0 +1,398 @@
+<mat-accordion class="renta-accordion">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>CONFIGURACION RENTA</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="summary-cards-grid">
+      <mat-card class="summary-card summary-card-full-row">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">Seguridad Social</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="summary-table security-table">
+            <thead>
+              <tr>
+                <th>CONCEPTO</th>
+                <th>EMPLEADO</th>
+                <th>EMPRESA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of socialSecurityRows">
+                <td>{{ row.label }}</td>
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ socialSecurity.employee[row.key] | number:'1.2-2' }}%</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openSocialSecurityEditor('employee', row.key, row.label)"
+                      aria-label="Editar porcentaje empleado"
+                      title="Editar porcentaje empleado"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ socialSecurity.company[row.key] | number:'1.2-2' }}%</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openSocialSecurityEditor('company', row.key, row.label)"
+                      aria-label="Editar porcentaje empresa"
+                      title="Editar porcentaje empresa"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>TOTAL</td>
+                <td>{{ totalEmpleado | number:'1.2-2' }}%</td>
+                <td>{{ totalEmpresa | number:'1.2-2' }}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">IRPF ESTATAL</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>INICIO</th>
+                <th>FIN</th>
+                <th>%</th>
+                <th>IMPUESTOS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of irpfEstatalRows; let index = index">
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ row.inicio | number:'1.2-2' }}</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openIrpfEstatalEditor(index, 'inicio')"
+                      aria-label="Editar inicio del tramo"
+                      title="Editar inicio del tramo"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <ng-container *ngIf="row.fin !== null; else irpfEstatalFinNoEditable">
+                    <div class="editable-cell">
+                      <span>{{ row.fin | number:'1.2-2' }}</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="openIrpfEstatalEditor(index, 'fin')"
+                        aria-label="Editar fin del tramo"
+                        title="Editar fin del tramo"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #irpfEstatalFinNoEditable>-</ng-template>
+                </td>
+                <td>
+                  <ng-container *ngIf="row.porcentaje !== null; else irpfEstatalPorcentajeNoEditable">
+                    <div class="editable-cell">
+                      <span>{{ row.porcentaje | number:'1.2-2' }}%</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="openIrpfEstatalEditor(index, 'porcentaje')"
+                        aria-label="Editar porcentaje del tramo"
+                        title="Editar porcentaje del tramo"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #irpfEstatalPorcentajeNoEditable>-</ng-template>
+                </td>
+                <td>{{ row.impuestos | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>TOTAL</td>
+                <td>-</td>
+                <td>-</td>
+                <td>{{ irpfEstatalImpuestosTotal | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">IRPF AUTONOMICO</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>INICIO</th>
+                <th>FIN</th>
+                <th>%</th>
+                <th>IMPUESTOS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of irpfAutonomicoRows; let index = index">
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ row.inicio | number:'1.2-2' }}</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openIrpfAutonomicoEditor(index, 'inicio')"
+                      aria-label="Editar inicio del tramo autonomico"
+                      title="Editar inicio del tramo autonomico"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <ng-container *ngIf="row.fin !== null; else irpfAutonomicoFinNoEditable">
+                    <div class="editable-cell">
+                      <span>{{ row.fin | number:'1.2-2' }}</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="openIrpfAutonomicoEditor(index, 'fin')"
+                        aria-label="Editar fin del tramo autonomico"
+                        title="Editar fin del tramo autonomico"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #irpfAutonomicoFinNoEditable>-</ng-template>
+                </td>
+                <td>
+                  <ng-container *ngIf="row.porcentaje !== null; else irpfAutonomicoPorcentajeNoEditable">
+                    <div class="editable-cell">
+                      <span>{{ row.porcentaje | number:'1.2-2' }}%</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="openIrpfAutonomicoEditor(index, 'porcentaje')"
+                        aria-label="Editar porcentaje del tramo autonomico"
+                        title="Editar porcentaje del tramo autonomico"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #irpfAutonomicoPorcentajeNoEditable>-</ng-template>
+                </td>
+                <td>{{ row.impuestos | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>TOTAL</td>
+                <td>-</td>
+                <td>-</td>
+                <td>{{ irpfAutonomicoImpuestosTotal | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="refreshSummary()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>RENTA</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="summary-cards-grid">
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">Resumen de nominas</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>CONCEPTO</th>
+                <th>IMPORTE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Salario Bruto</td>
+                <td>{{ salarioBruto | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>Otros beneficios</td>
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ otrosBeneficios | number:'1.2-2' }}</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openOtrosBeneficiosEditor()"
+                      aria-label="Editar otros beneficios"
+                      title="Editar otros beneficios"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>TOTAL</td>
+                <td>{{ total | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">Exencion de impuestos</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>CONCEPTO</th>
+                <th>IMPORTE ESTATAL</th>
+                <th>IMPORTE AUTONOMICO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of exencionConceptRows; let index = index">
+                <td>{{ row.label }}</td>
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ baseCotizacionEstatal[index] | number:'1.2-2' }}</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openBaseCotizacionEditor(index, 'estatal')"
+                      aria-label="Editar importe estatal"
+                      title="Editar importe estatal"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ baseCotizacionAutonomico[index] | number:'1.2-2' }}</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openBaseCotizacionEditor(index, 'autonomico')"
+                      aria-label="Editar importe autonomico"
+                      title="Editar importe autonomico"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>TOTAL</td>
+                <td>{{ totalBaseCotizacionEstatal | number:'1.2-2' }}</td>
+                <td>{{ totalBaseCotizacionAutonomico | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>IMPUESTOS</td>
+                <td>{{ impuestosBaseCotizacionEstatal | number:'1.2-2' }}</td>
+                <td>{{ impuestosBaseCotizacionAutonomico | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">Base de Cotizacion</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="summary-table base-cotizacion-table">
+            <thead>
+              <tr>
+                <th>CONCEPTO</th>
+                <th>IMPORTE TOTAL</th>
+                <th>IMPORTE PAGADO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>RENDIMIENTO TRABAJO</td>
+                <td>
+                  <div class="editable-cell">
+                    <span>{{ baseCotizacionRendimientoTrabajo | number:'1.2-2' }}</span>
+                    <button
+                      mat-icon-button
+                      class="inline-edit"
+                      (click)="openBaseCotizacionRentaEditor()"
+                      aria-label="Editar rendimiento trabajo"
+                      title="Editar rendimiento trabajo"
+                    >
+                      ✎
+                    </button>
+                  </div>
+                </td>
+                <td>{{ baseCotizacionRendimientoTrabajo | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>SS EMPLEADO</td>
+                <td>{{ baseCotizacionSsEmpleadoTotal | number:'1.2-2' }}</td>
+                <td>{{ annualSsEmpleadoPaid | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>SS EMPRESA</td>
+                <td>{{ baseCotizacionSsEmpresaTotal | number:'1.2-2' }}</td>
+                <td>{{ annualSsEmpresaPaid | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>TOTAL</td>
+                <td>{{ baseCotizacionTotal | number:'1.2-2' }}</td>
+                <td>{{ baseCotizacionPagadoTotal | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <td>BASE IRPF</td>
+                <td>{{ baseCotizacionBaseIrpf | number:'1.2-2' }}</td>
+                <td>{{ baseCotizacionBaseIrpfPagada | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<div class="floating-editor-overlay" *ngIf="floatingEditor.isOpen" (click)="closeFloatingEditor()"></div>
+<div class="floating-editor-panel" *ngIf="floatingEditor.isOpen" (click)="$event.stopPropagation()">
+  <button mat-icon-button class="floating-editor-save" (click)="saveFloatingEditor()">✓</button>
+  <div class="floating-editor-label">{{ floatingEditor.label }}</div>
+  <input
+    class="floating-editor-input"
+    type="number"
+    step="0.01"
+    [(ngModel)]="floatingEditor.value"
+    (keydown.enter)="saveFloatingEditor()"
+  >
+</div>

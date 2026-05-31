@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { MonthFormService } from '../../core/services/month-form.service';
+import { DEFAULT_SOCIAL_SECURITY_PERCENTAGES, MonthFormService, SocialSecurityPercentages } from '../../core/services/month-form.service';
 import { TAX_CONSTANTS } from '../../core/utils/constants';
 import { EmployeeData, SalaryData, SalaryItem, BenefitsData, BenefitItem, TaxesData } from '../../core/models/models';
 
@@ -127,13 +127,15 @@ export class MonthTabComponent implements OnInit {
     this.salary = this.monthService.calculateSalaryDevengos(this.salary, this.employee);
     this.benefits = this.monthService.calculateBenefits(this.benefits, this.employee);
     const isExtra = this.monthName.includes('Extra');
+    const socialSecurityPercentages = this.getSocialSecurityPercentages();
     this.taxes = this.monthService.calculateTaxes(
       this.salary,
       this.benefits,
       this.employee,
       this.irpfPercent,
       this.irpfExtraPercent,
-      isExtra
+      isExtra,
+      socialSecurityPercentages
     );
     this.recalculateResumenMensual();
     this.recalculateAcumulado();
@@ -432,6 +434,7 @@ export class MonthTabComponent implements OnInit {
     }
 
     const previousMonths = TAX_CONSTANTS.MONTHS.slice(0, currentIndex);
+    const socialSecurityPercentages = this.getSocialSecurityPercentages();
     previousMonths.forEach(month => {
       const saved = window.localStorage.getItem(`month-tab-state-${month}`);
       if (!saved) {
@@ -487,7 +490,8 @@ export class MonthTabComponent implements OnInit {
           employee,
           irpfPercent,
           irpfExtraPercent,
-          month.includes('Extra')
+          month.includes('Extra'),
+          socialSecurityPercentages
         );
         const neto = (salaryCalculated.totalDevengos + benefitsCalculated.totalDevengos)
           - (benefitsCalculated.totalCalculados + taxesCalculated.totalDeduccionesEmpleado);
@@ -508,6 +512,74 @@ export class MonthTabComponent implements OnInit {
 
   private get isBrowser(): boolean {
     return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+  }
+
+  private getSocialSecurityPercentages(): SocialSecurityPercentages {
+    if (!this.isBrowser) {
+      return DEFAULT_SOCIAL_SECURITY_PERCENTAGES;
+    }
+
+    try {
+      const saved = window.localStorage.getItem(IRPF_SUMMARY_STORAGE_KEY);
+      if (!saved) {
+        return DEFAULT_SOCIAL_SECURITY_PERCENTAGES;
+      }
+
+      const parsed = JSON.parse(saved) as {
+        socialSecurity?: {
+          employee?: Partial<{
+            desempleo: number;
+            formacionProfesional: number;
+            contingenciasComunes: number;
+            mei: number;
+            fogasa: number;
+            atPe: number;
+          }>;
+          company?: Partial<{
+            desempleo: number;
+            formacionProfesional: number;
+            contingenciasComunes: number;
+            mei: number;
+            fogasa: number;
+            atPe: number;
+          }>;
+        };
+      };
+
+      const employee = parsed.socialSecurity?.employee;
+      const company = parsed.socialSecurity?.company;
+      if (!employee || !company) {
+        return DEFAULT_SOCIAL_SECURITY_PERCENTAGES;
+      }
+
+      return {
+        employee: {
+          desempleo: this.toDecimal(employee.desempleo, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.employee.desempleo),
+          formacionProfesional: this.toDecimal(employee.formacionProfesional, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.employee.formacionProfesional),
+          contingenciasComunes: this.toDecimal(employee.contingenciasComunes, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.employee.contingenciasComunes),
+          mei: this.toDecimal(employee.mei, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.employee.mei),
+          fogasa: this.toDecimal(employee.fogasa, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.employee.fogasa),
+          atPe: this.toDecimal(employee.atPe, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.employee.atPe),
+        },
+        company: {
+          desempleo: this.toDecimal(company.desempleo, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.company.desempleo),
+          formacionProfesional: this.toDecimal(company.formacionProfesional, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.company.formacionProfesional),
+          contingenciasComunes: this.toDecimal(company.contingenciasComunes, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.company.contingenciasComunes),
+          mei: this.toDecimal(company.mei, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.company.mei),
+          fogasa: this.toDecimal(company.fogasa, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.company.fogasa),
+          atPe: this.toDecimal(company.atPe, DEFAULT_SOCIAL_SECURITY_PERCENTAGES.company.atPe),
+        }
+      };
+    } catch {
+      return DEFAULT_SOCIAL_SECURITY_PERCENTAGES;
+    }
+  }
+
+  private toDecimal(value: number | undefined, fallback: number): number {
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+      return fallback;
+    }
+    return value / 100;
   }
 
   get monthOptions(): string[] {
@@ -603,3 +675,5 @@ type StoredMonthState = {
   irpfPercent?: number;
   irpfExtraPercent?: number;
 };
+
+const IRPF_SUMMARY_STORAGE_KEY = 'irpf-summary-state';

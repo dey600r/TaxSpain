@@ -1,10 +1,10 @@
 
 
-## 1. Secciones mensuales colapsables: `Enero` … `Diciembre`
+## 1. Secciones mensuales colapsables: `Enero` … `Diciembre` y `Resumen`
 
 Las 14 secciones comparten **estructura y fórmulas idénticas**. Cambian únicamente los inputs del mes. Cada mes se representa como un panel colapsable en la misma página del dashboard, conservando el mismo contenido que antes estaban en pestañas.
 
-A continuación las 14 secciones:
+A continuación las 15 secciones:
 - `Enero`
 - `Febrero`
 - `Marzo`
@@ -19,6 +19,7 @@ A continuación las 14 secciones:
 - `Noviembre`
 - `Diciembre`
 - `Extra2`
+- `Resumen`
 
 ### 1.1 COLAPSABLE `NOMINA`
 
@@ -153,12 +154,12 @@ FILAS ADICIONALES
 
 COLUMNA 3 -> `% EMPLEADOS`
 FILAS FIJAS - Datos proporcionados por defecto
-1 - Desempleo -> Valor por defecto 1,55%
-2 - Formacion Profesional -> Valor por defecto 0,10%
-3 - Contingencias Comunes -> Valor por defecto 4,7%
-4 - MEI -> Valor por defecto 0,15%
-5 - FOGASA -> Valor por defecto 0%
-6 - AT/PE -> Valor por defecto 0%
+1 - Desempleo -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPLEADOS en la fila 1 Desempleo
+2 - Formacion Profesional -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPLEADOS en la fila 2 Formacion Profesional
+3 - Contingencias Comunes -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPLEADOS en la fila 3 Contingencias Comunes
+4 - MEI -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPLEADOS en la fila 4 MEI
+5 - FOGASA -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPLEADOS en la fila 5 FOGASA
+6 - AT/PE -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPLEADOS en la fila 6 AT/PE
 FILAS ADICIONALES
 7 - IRPF -> Valor editable -> Valor por defecto 22,22%
 8 - IRPF EXTRA -> Valor editable -> Valor por defecto 0%
@@ -179,12 +180,12 @@ FILAS ADICIONALES
 
 COLUMNA 5 -> `% EMPRESA`
 FILAS FIJAS - Datos proporcionados por defecto
-1 - Desempleo -> Valor por defecto 5,5%
-2 - Formacion Profesional -> Valor por defecto 0,60%
-3 - Contingencias Comunes -> Valor por defecto 23,6%
-4 - MEI -> Valor por defecto 0,75%
-5 - FOGASA -> Valor por defecto 0,2%
-6 - AT/PE -> Valor por defecto 1,5%
+1 - Desempleo -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPRESA en la fila 1 Desempleo
+2 - Formacion Profesional -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPRESA en la fila 2 Formacion Profesional
+3 - Contingencias Comunes -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPRESA en la fila 3 Contingencias Comunes
+4 - MEI -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPRESA en la fila 4 MEI
+5 - FOGASA -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPRESA en la fila 5 FOGASA
+6 - AT/PE -> Valor indicado en el colapsable de Resumen la RENTA en la tabla Seguridad Social en la columna 2 EMPRESA en la fila 6 AT/PE 
 FILAS ADICIONALES
 7 - IRPF -> Vacio no editable
 8 - IRPF EXTRA -> Vacio no editable
@@ -267,6 +268,245 @@ El gráfico debe coger 4 valores claros de la tabla ACUMULADOS en los que repres
 - Cotizacion SS Empleado (COLUMNA 2)
 - Cotizacion SS Empresa  (COLUMNA 2)
 - Recibido (NETO) (COLUMNA 2)
+
+## 2. Resumen colapsable
+
+Este colapsable va al final de la lista de meses despues de Extra 2 y su funcion es hacer un resumen del año para poder hacer la declaración de la renta
+
+### 2.1 COLAPSABLE `CONFIGURACION RENTA`
+
+En esta sección se utilizará para configurar los tramos de IRPF y de Seguridad Social
+
+- CARDS:
+    - Seguridad Social: Tabla de porcentajes de impuestos a la seguridad social por parte de empleado y empresa
+    - IRPF ESTATAL: Tablas de porcentajes de los tramos de irpf para el gobierno central
+    - IRPF AUTONOMICO: Tablas de porcentajes de los tramos de IRPF para el gobierno autonómico
+
+#### 2.1.1 CARD: `Seguridad Social`
+#### 2.1.1.1 TABLA: `Seguridad Social`
+
+Esta tabla indicara los porcentajes del empleado y la empresa de cotizaciones a la seguridad social:
+
+Tabla con 3 columnas:
+
+COLUMNA 1 (no editable) -> `CONCEPTO`
+FILAS FIJAS
+1 - Label: `Desempleo`
+2 - Label: `Formacion Profesional` 
+3 - Label: `Contingencias Comunes`
+4 - Label: `MEI`
+5 - Label: `FOGASA`
+6 - Label: `AT/EP`
+7 - Label: `TOTAL`
+
+COLUMNA 2 -> `EMPLEADO`
+FILAS FIJAS - Se calculan automaticamente porque no son editables
+1 - Desempleo -> Valor editable con valor por defecto 1,55%
+2 - Formacion Profesional -> Valor editable por defecto 0,10%
+3 - Contingencias Comunes -> Valor editable por defecto 4,7%
+4 - MEI -> Valor editable por defecto 0,15%
+5 - FOGASA -> Valor editable por defecto 0%
+6 - AT/EP -> Valor editable por defecto 0%
+7 - TOTAL -> Calculo automatico: Sumatorio de todos los valores de la misma columna
+
+COLUMNA 3 -> `EMPRESA`
+FILAS FIJAS - Se calculan automaticamente porque no son editables
+1 - Desempleo -> Valor editable con valor por defecto 5,50%
+2 - Formacion Profesional -> Valor editable por defecto 0,60%
+3 - Contingencias Comunes -> Valor editable por defecto 23,60%
+4 - MEI -> Valor editable por defecto 0,75%
+5 - FOGASA -> Valor editable por defecto 0,20%
+6 - AT/EP -> Valor editable por defecto 1,50%
+7 - TOTAL -> Calculo automatico: Sumatorio de todos los valores de la misma columna
+
+COMPORTAMIENTO IMPORTANTES DE ESTOS VALORES: Estos porcentajes coinciden con la tabla de IMPUESTOS de cada nomina del mes (pestaña de los meses) concretamente con:
+ - tabla IMPUESTOS COLUMNA 2 %EMPELADO es igual a COLUMNA 2 `EMPLEADO`
+ - tabla IMPUESTOS COLUMNA 4 %EMPRESA es igual a COLUMNA 3 `EMPRESA`
+
+#### 2.1.2 CARD: `IRPF ESTATAL`
+#### 2.1.2.1 TABLA: `IRPF ESTATAL`
+
+Esta tabla indicara los tramos de IRPF para el gobierno central:
+
+Tabla con 3 columnas:
+
+COLUMNA 1 -> `INICIO`
+FILAS FIJAS
+1 - Valor editable por defecto 0
+2 - Valor editable por defecto 12450 
+3 - Valor editable por defecto 20200
+4 - Valor editable por defecto 35200
+5 - Valor editable por defecto 60000
+6 - Valor editable por defecto 300000
+7 - Label `TOTAL`
+
+COLUMNA 2 -> `FIN`
+FILAS FIJAS
+1 - Valor editable por defecto 12449,99
+2 - Valor editable por defecto 20199,99
+3 - Valor editable por defecto 35199,99
+4 - Valor editable por defecto 59999,99
+5 - Valor editable por defecto 29999,99
+6 - Valor NO editable por defecto null
+7 - Valor NO editable por defecto null
+
+COLUMNA 3 -> `%`
+FILAS FIJAS
+1 - Valor editable por defecto 9,5%
+2 - Valor editable por defecto 12,00%
+3 - Valor editable por defecto 15,00%
+4 - Valor editable por defecto 18,50%
+5 - Valor editable por defecto 22,50
+6 - Valor editable por defecto 24,50%
+7 - Valor NO editable por defecto null
+
+COLUMNA 4 -> `IMPUESTOS`
+FILAS FIJAS - Se calculan automaticamente porque no son editables
+1 - 0
+2 - 0
+3 - 0
+4 - 0
+5 - 0
+6 - 0
+7 - Calculo automático: Sumatorio de los valores de la misma columna
+
+#### 2.1.2 CARD: `IRPF AUTONOMICO`
+#### 2.1.2.1 TABLA: `IRPF AUTONOMICO`
+
+Esta tabla indicara los tramos de IRPF para el gobierno autonomico:
+
+Tabla con 3 columnas:
+
+COLUMNA 1 -> `INICIO`
+FILAS FIJAS
+1 - Valor editable por defecto 0
+2 - Valor editable por defecto 12450 
+3 - Valor editable por defecto 20200
+4 - Valor editable por defecto 35200
+5 - Valor editable por defecto 60000
+6 - Valor editable por defecto 300000
+7 - Label `TOTAL`
+
+COLUMNA 2 -> `FIN`
+FILAS FIJAS
+1 - Valor editable por defecto 12449,99
+2 - Valor editable por defecto 20199,99
+3 - Valor editable por defecto 35199,99
+4 - Valor editable por defecto 59999,99
+5 - Valor editable por defecto 29999,99
+6 - Valor NO editable por defecto null
+7 - Valor NO editable por defecto null
+
+COLUMNA 3 -> `%`
+FILAS FIJAS
+1 - Valor editable por defecto 9,5%
+2 - Valor editable por defecto 12,00%
+3 - Valor editable por defecto 15,00%
+4 - Valor editable por defecto 18,50%
+5 - Valor editable por defecto 22,50
+6 - Valor editable por defecto 24,50%
+7 - Valor NO editable por defecto null
+
+COLUMNA 4 -> `IMPUESTOS`
+FILAS FIJAS - Se calculan automaticamente porque no son editables
+1 - 0
+2 - 0
+3 - 0
+4 - 0
+5 - 0
+6 - 0
+7 - Calculo automático: Sumatorio de los valores de la misma columna
+
+### 2.2 COLAPSABLE `RENTA`
+
+En esta sección se utilizará para introducir los datos del año de los tramos de IRPF y la seguridad social para poder calcular los resultados de la declaración de la renta en base a las nominas mensuales anteriores:
+
+- CARDS:
+    - Resumen de nominas: Tabla que da el resumen bruto recibido con las nominas anteriores
+
+#### 2.2.1 CARD: `Resumen de nominas`
+#### 2.2.1.1 TABLA: `Resumen de nominas`
+
+Esta tabla indicara el resumen total anual de todas las nominas:
+
+Tabla con 3 columnas:
+
+COLUMNA 1 (no editable) -> `CONCEPTO`
+FILAS FIJAS
+1 - Label: `Salario Bruto`
+2 - Label: `Otros beneficios` 
+3 - Label: `TOTAL`
+
+COLUMNA 2 -> `IMPORTE`
+FILAS FIJAS - Se calculan automaticamente porque no son editables
+1 - Salario Bruto -> Mismo valor que el colapsable "Extra2" en la tabla ACUMULADO la columna 3 el valor de Imponible IRPF
+2 - Otros beneficios -> Valor editable por defecto 0
+3 - TOTAL -> Calculo automatico: Sumatorio de todos los valores de la misma columna
+
+#### 2.2.2 CARD: `Exencion de impuestos`
+#### 2.2.2.1 TABLA: `Exencion de impuestos`
+
+Esta tabla indicara que parte de los tramos de irpf esta exento de impuestos:
+
+Tabla con 3 columnas:
+
+COLUMNA 1 (no editable) -> `CONCEPTO`
+FILAS FIJAS
+1 - Label: `MINIMO PERSONAL`
+2 - Label: `DESCENDIENTES`
+3 - Label: `ASCENDIENTES`
+4 - Label: `MINUSVALIAS`
+5 - Label: `TOTAL`
+6 - Label: `IMPUESTOS`
+
+COLUMNA 2 -> `IMPORTE ESTATAL`
+FILAS FIJAS - Son campos editables y calculados
+1 - MINIMO PERSONAL -> Valor editable por defecto 5550
+2 - DESCENDIENTES -> Valor editable por defecto 0
+3 - ASCENDIENTES -> Valor editable por defecto 0
+4 - MINUSVALIAS -> Valor editable por defecto 0
+5 - TOTAL -> Calculo automatico: Sumatorio de las filas anteriores
+6 - IMPUESTOS -> Calculo automático: TOTAL de esta misma columna * COLUMNA 3 TABLA IRPF ESTATAL FILA 1
+
+COLUMNA 3 -> `IMPORTE AUTONOMICO`
+FILAS FIJAS - Son campos editables y calculados
+1 - MINIMO PERSONAL -> Valor editable por defecto 5956,65
+2 - DESCENDIENTES -> Valor editable por defecto 0
+3 - ASCENDIENTES -> Valor editable por defecto 0
+4 - MINUSVALIAS -> Valor editable por defecto 0
+5 - TOTAL -> Calculo automatico: Sumatorio de las filas anteriores
+6 - IMPUESTOS -> Calculo automático: TOTAL de esta misma columna * COLUMNA 3 TABLA IRPF AUTONOMICO FILA 1
+
+#### 2.2.3 CARD: `Base de Cotizacion`
+#### 2.2.3.1 TABLA: `Base de Cotizacion`
+
+Esta tabla indicara que base de cotización se utilizará para calcular los impuestos definitivos:
+
+Tabla con 3 columnas:
+
+COLUMNA 1 (no editable) -> `CONCEPTO`
+FILAS FIJAS
+1 - Label: `RENDIMIENTO TRABAJO`
+2 - Label: `SS EMPLEADO`
+3 - Label: `SS EMPRESA`
+4 - Label: `TOTAL`
+5 - Label: `BASE IRPF`
+
+COLUMNA 2 -> `IMPORTE TOTAL`
+FILAS FIJAS - Son campos editables y calculados
+1 - RENDIMIENTO TRABAJO -> Valor editable por defecto 2000
+2 - SS EMPLEADO -> Calculo automático: (Columna 2 fila 3 TOTAL de la tabla RESUMEN NOMINAS * Columna 2 fila total de la tabla Seguridad Social)
+3 - SS EMPRESA -> Calculo automático: (Columna 2 fila 3 TOTAL de la tabla RESUMEN NOMINAS * Columna 3 fila total de la tabla Seguridad Social)
+4 - TOTAL -> Caclulo automático: sumatorio de esta misma columna pero solo las filas 1 y 2 (RENDIMIENTO TRABAJO + SS EMPLEADO)
+5 - BASE IRPF -> Calculo automatico: (Columna 2 fila 3 TOTAL de la tabla RESUMEN NOMINAS - TOTAL de la fila anterior)
+
+COLUMNA 3 -> `IMPORTE PAGADO`
+FILAS FIJAS - Son campos editables y calculados
+1 - RENDIMIENTO TRABAJO -> Valor no editable que es igual al valor RENDIMIENTO TRABAJO de la columna 2
+2 - SS EMPLEADO -> Mismo valor que en el colapsable de Extra 2 la tabla acumulado la columna 3 TOTAL la fila 3 Cotizaccion SS Empleado
+3 - SS EMPRESA -> Mismo valor que en el colapsable de Extra 2 la tabla acumulado la columna 3 TOTAL la fila 4 Cotizaccion SS Empresa
+4 - TOTAL -> Caclulo automático: sumatorio de esta misma columna pero solo las filas 1 y 2 (RENDIMIENTO TRABAJO + SS EMPLEADO)
+5 - BASE IRPF -> Calculo automatico: (Columna 2 fila 3 TOTAL de la tabla RESUMEN NOMINAS - TOTAL de la fila anterior)
 
 **Fin del documento.**
 
