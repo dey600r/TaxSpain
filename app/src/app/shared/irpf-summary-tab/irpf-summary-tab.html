@@ -124,7 +124,7 @@
                   </ng-container>
                   <ng-template #irpfEstatalPorcentajeNoEditable>-</ng-template>
                 </td>
-                <td>{{ row.impuestos | number:'1.2-2' }}</td>
+                <td>{{ getIrpfEstatalImpuesto(index, row) | number:'1.2-2' }}</td>
               </tr>
               <tr>
                 <td>TOTAL</td>
@@ -201,7 +201,7 @@
                   </ng-container>
                   <ng-template #irpfAutonomicoPorcentajeNoEditable>-</ng-template>
                 </td>
-                <td>{{ row.impuestos | number:'1.2-2' }}</td>
+                <td>{{ getIrpfAutonomicoImpuesto(index, row) | number:'1.2-2' }}</td>
               </tr>
               <tr>
                 <td>TOTAL</td>
@@ -221,7 +221,7 @@
       <mat-panel-title>RENTA</mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div class="summary-cards-grid">
+    <div class="summary-cards-grid summary-cards-grid-full">
       <mat-card class="summary-card">
         <mat-card-header>
           <mat-card-title class="summary-card-title-spaced">Resumen de nominas</mat-card-title>

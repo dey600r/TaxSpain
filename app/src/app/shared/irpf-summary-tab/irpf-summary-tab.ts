@@ -101,11 +101,31 @@ export class IrpfSummaryTabComponent implements OnInit {
   }
 
   get irpfEstatalImpuestosTotal(): number {
-    return this.irpfEstatalRows.reduce((sum, row) => sum + row.impuestos, 0);
+    return this.irpfEstatalRows.reduce((sum, row, index) => {
+      return sum + this.getIrpfEstatalImpuesto(index, row);
+    }, 0);
   }
 
   get irpfAutonomicoImpuestosTotal(): number {
-    return this.irpfAutonomicoRows.reduce((sum, row) => sum + row.impuestos, 0);
+    return this.irpfAutonomicoRows.reduce((sum, row, index) => {
+      return sum + this.getIrpfAutonomicoImpuesto(index, row);
+    }, 0);
+  }
+
+  get irpfEstatalImpuestoFila1(): number {
+    return this.calculateIrpfImpuestoForRow(this.irpfEstatalRows, 0, this.irpfEstatalRows[0]);
+  }
+
+  get irpfAutonomicoImpuestoFila1(): number {
+    return this.calculateIrpfImpuestoForRow(this.irpfAutonomicoRows, 0, this.irpfAutonomicoRows[0]);
+  }
+
+  getIrpfEstatalImpuesto(index: number, row: IrpfEstatalRow): number {
+    return this.calculateIrpfImpuestoForRow(this.irpfEstatalRows, index, row);
+  }
+
+  getIrpfAutonomicoImpuesto(index: number, row: IrpfAutonomicoRow): number {
+    return this.calculateIrpfImpuestoForRow(this.irpfAutonomicoRows, index, row);
   }
 
   get totalBaseCotizacionEstatal(): number {
@@ -612,6 +632,37 @@ export class IrpfSummaryTabComponent implements OnInit {
 
   private toPercent(value: number): number {
     return value * 100;
+  }
+
+  private calculateIrpfImpuestoForRow(
+    rows: Array<{ inicio: number; porcentaje: number | null; impuestos?: number }>,
+    index: number,
+    row?: { inicio: number; porcentaje: number | null; impuestos?: number }
+  ): number {
+    const currentRow = row ?? rows[index];
+    if (!currentRow) {
+      return 0;
+    }
+
+    const totalBaseCotizacionColumna3 = this.baseCotizacionBaseIrpfPagada;
+    const inicioFilaActual = currentRow.inicio ?? 0;
+    const porcentajeFilaActual = (currentRow.porcentaje ?? 0) / 100;
+
+    if (porcentajeFilaActual <= 0) {
+      return currentRow.impuestos ?? 0;
+    }
+
+    const siguienteFila = rows[index + 1];
+
+    let base = 0;
+    if (siguienteFila) {
+      const inicioFilaSiguiente = siguienteFila.inicio ?? 0;
+      base = (totalBaseCotizacionColumna3 < inicioFilaActual ? 0 : (totalBaseCotizacionColumna3 - inicioFilaActual)) - (totalBaseCotizacionColumna3 < inicioFilaSiguiente ? 0 : (totalBaseCotizacionColumna3 - inicioFilaSiguiente));
+    } else {
+      base = (totalBaseCotizacionColumna3 < inicioFilaActual ? 0 : (totalBaseCotizacionColumna3 - inicioFilaActual));
+    }
+
+    return Math.max(base, 0) * porcentajeFilaActual;
   }
 
   private get isBrowser(): boolean {
