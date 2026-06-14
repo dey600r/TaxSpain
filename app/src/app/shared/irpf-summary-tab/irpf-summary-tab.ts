@@ -30,6 +30,7 @@ export class IrpfSummaryTabComponent implements OnInit {
   baseCotizacionRendimientoTrabajo = 2000;
   annualSsEmpleadoPaid = 0;
   annualSsEmpresaPaid = 0;
+  annualIrpfPaid = 0;
   socialSecurity: Record<SocialSecuritySide, Record<SocialSecurityKey, number>> = {
     employee: {
       desempleo: this.toPercent(DEFAULT_SOCIAL_SECURITY_PERCENTAGES.employee.desempleo),
@@ -170,11 +171,100 @@ export class IrpfSummaryTabComponent implements OnInit {
     return this.total - this.baseCotizacionPagadoTotal;
   }
 
+  get irpfNecesarioEstatalEuroRetencionIrpf(): number {
+    return this.irpfEstatalImpuestosTotal - this.impuestosBaseCotizacionEstatal;
+  }
+
+  get irpfNecesarioEstatalPorcentajeRetencionIrpf(): number {
+    if (this.baseCotizacionBaseIrpf <= 0) {
+      return 0;
+    }
+
+    return (this.irpfNecesarioEstatalEuroRetencionIrpf / this.baseCotizacionBaseIrpf) * 100;
+  }
+
+  get irpfNecesarioAutonomicoEuroRetencionIrpf(): number {
+    return this.irpfAutonomicoImpuestosTotal - this.impuestosBaseCotizacionAutonomico;
+  }
+
+  get irpfNecesarioAutonomicoPorcentajeRetencionIrpf(): number {
+    if (this.baseCotizacionBaseIrpfPagada <= 0) {
+      return 0;
+    }
+
+    return (this.irpfNecesarioAutonomicoEuroRetencionIrpf / this.baseCotizacionBaseIrpfPagada) * 100;
+  }
+
+  get irpfNecesarioTotalEuroRetencionIrpf(): number {
+    return this.irpfNecesarioEstatalEuroRetencionIrpf + this.irpfNecesarioAutonomicoEuroRetencionIrpf;
+  }
+
+  get irpfNecesarioTotalPorcentajeRetencionIrpf(): number {
+    return this.irpfNecesarioEstatalPorcentajeRetencionIrpf + this.irpfNecesarioAutonomicoPorcentajeRetencionIrpf;
+  }
+
+  get borradorRetencionIrpfPagadoEuro(): number {
+    return this.annualIrpfPaid;
+  }
+
+  get borradorRetencionIrpfPagadoPercent(): number {
+    if (this.total <= 0) {
+      return 0;
+    }
+
+    return (this.borradorRetencionIrpfPagadoEuro / this.total) * 100;
+  }
+
+  get borradorRetencionIrpfEuro(): number {
+    return this.irpfNecesarioTotalEuroRetencionIrpf - this.borradorRetencionIrpfPagadoEuro;
+  }
+
+  get borradorRetencionCapitalPagadoEuro(): number {
+    return 0;
+  }
+
+  get borradorRetencionCapitalPagadoPercent(): number {
+    if (this.total <= 0) {
+      return 0;
+    }
+
+    return (this.borradorRetencionCapitalPagadoEuro / this.total) * 100;
+  }
+
+  get borradorRetencionCapitalEuro(): number {
+    return 0 - this.borradorRetencionCapitalPagadoEuro;
+  }
+
+  get borradorCuotasLiquidasPagadoEuro(): number {
+    return this.borradorRetencionIrpfPagadoEuro + this.borradorRetencionCapitalPagadoEuro;
+  }
+
+  get borradorCuotasLiquidasPagadoPercent(): number {
+    if (this.total <= 0) {
+      return 0;
+    }
+
+    return (this.borradorCuotasLiquidasPagadoEuro / this.total) * 100;
+  }
+
+  get borradorCuotasLiquidasEuro(): number {
+    return this.borradorRetencionIrpfEuro + this.borradorRetencionCapitalEuro;
+  }
+
+  get borradorIsPayable(): boolean {
+    return this.borradorCuotasLiquidasEuro > 0;
+  }
+
+  get borradorIsCompensated(): boolean {
+    return Math.abs(this.borradorCuotasLiquidasEuro) < 0.005;
+  }
+
   refreshSummary(): void {
     this.salarioBruto = this.calculateAnnualImponibleIrpf();
     const annualPaidTotals = this.calculateAnnualSocialSecurityTotals();
     this.annualSsEmpleadoPaid = annualPaidTotals.employee;
     this.annualSsEmpresaPaid = annualPaidTotals.company;
+    this.annualIrpfPaid = this.calculateAnnualRetencionesIrpfTotal();
   }
 
   onOtrosBeneficiosChange(): void {
@@ -426,6 +516,54 @@ export class IrpfSummaryTabComponent implements OnInit {
         return totals;
       }
     }, { employee: 0, company: 0 });
+  }
+
+  private calculateAnnualRetencionesIrpfTotal(): number {
+    if (!this.isBrowser) {
+      return 0;
+    }
+
+    return TAX_CONSTANTS.MONTHS.reduce((sum, month) => {
+      const saved = window.localStorage.getItem(`month-tab-state-${month}`);
+      if (!saved) {
+        return sum;
+      }
+
+      try {
+        const parsed = JSON.parse(saved) as StoredMonthState;
+        const employee = this.buildEmployee(parsed.employee);
+        const salary = this.buildSalary(parsed.salary?.items);
+        const benefits = this.buildBenefits(parsed.benefits?.items);
+
+        if (!salary.items.length || !benefits.items.length) {
+          return sum;
+        }
+
+        const irpfPercent = typeof parsed.irpfPercent === 'number'
+          ? parsed.irpfPercent
+          : TAX_CONSTANTS.DEFAULTS.IRPF_PERCENT;
+        const irpfExtraPercent = typeof parsed.irpfExtraPercent === 'number'
+          ? parsed.irpfExtraPercent
+          : 0;
+
+        const salaryCalculated = this.monthService.calculateSalaryDevengos(salary, employee);
+        const benefitsCalculated = this.monthService.calculateBenefits(benefits, employee);
+        const taxesCalculated = this.monthService.calculateTaxes(
+          salaryCalculated,
+          benefitsCalculated,
+          employee,
+          irpfPercent,
+          irpfExtraPercent,
+          month.includes('Extra'),
+          this.getSocialSecurityPercentagesDecimal()
+        );
+
+        const retencionIrpf = taxesCalculated.items.find(item => item.concepto === 'IRPF')?.deduccionesEmpleado ?? 0;
+        return sum + retencionIrpf;
+      } catch {
+        return sum;
+      }
+    }, 0);
   }
 
   private buildEmployee(employee?: EmployeeData): EmployeeData {

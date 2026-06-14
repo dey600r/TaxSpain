@@ -13,11 +13,24 @@
 }
 
 .summary-card {
-  margin: 16px 0;
+  margin: 0;
 }
 
 .summary-card-full-row {
   grid-column: 1 / -1;
+}
+
+.summary-card-span-two {
+  grid-column: 1 / -1;
+}
+
+.table-scroll-x {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-scroll-x .summary-table {
+  min-width: 920px;
 }
 
 .summary-row-group {
@@ -54,6 +67,22 @@
   white-space: nowrap;
 }
 
+.irpf-necesario-table th,
+.irpf-necesario-table td,
+.borrador-renta-table th,
+.borrador-renta-table td {
+  white-space: nowrap;
+}
+
+.status-payable {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.status-refundable {
+  color: #2e7d32;
+  font-weight: 600;
+}
 
 .editable-cell {
   display: inline-flex;
@@ -135,6 +164,10 @@
 @media (max-width: 1100px) {
   .summary-cards-grid {
     grid-template-columns: 1fr;
+  }
+
+  .summary-card-span-two {
+    grid-column: auto;
   }
 
   .summary-row-group {

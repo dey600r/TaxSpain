@@ -264,7 +264,7 @@
           </table>
         </mat-card-content>
       </mat-card>
-      
+
       <mat-card class="summary-card">
         <mat-card-header>
           <mat-card-title class="summary-card-title-spaced">Exencion de impuestos</mat-card-title>
@@ -378,6 +378,104 @@
               </tr>
             </tbody>
           </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card summary-card-span-two">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">IRPF Necesario</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-scroll-x">
+            <table class="summary-table irpf-necesario-table">
+              <thead>
+                <tr>
+                  <th>CONCEPTO</th>
+                  <th>ESTATAL €</th>
+                  <th>ESTATAL %</th>
+                  <th>AUTONOMICO €</th>
+                  <th>AUTONOMICO %</th>
+                  <th>TOTAL €</th>
+                  <th>TOTAL %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>RETENCION IRPF</td>
+                  <td>{{ irpfNecesarioEstatalEuroRetencionIrpf | number:'1.2-2' }}</td>
+                  <td>{{ irpfNecesarioEstatalPorcentajeRetencionIrpf | number:'1.2-2' }}%</td>
+                  <td>{{ irpfNecesarioAutonomicoEuroRetencionIrpf | number:'1.2-2' }}</td>
+                  <td>{{ irpfNecesarioAutonomicoPorcentajeRetencionIrpf | number:'1.2-2' }}%</td>
+                  <td>{{ irpfNecesarioTotalEuroRetencionIrpf | number:'1.2-2' }}</td>
+                  <td>{{ irpfNecesarioTotalPorcentajeRetencionIrpf | number:'1.2-2' }}%</td>
+                </tr>
+                <tr>
+                  <td>RETENCION CAPITAL</td>
+                  <td>{{ 0 | number:'1.2-2' }}</td>
+                  <td>{{ 0 | number:'1.2-2' }}%</td>
+                  <td>{{ 0 | number:'1.2-2' }}</td>
+                  <td>{{ 0 | number:'1.2-2' }}%</td>
+                  <td>{{ 0 | number:'1.2-2' }}</td>
+                  <td>{{ 0 | number:'1.2-2' }}%</td>
+                </tr>
+                <tr>
+                  <td>CUOTAS LIQUIDAS</td>
+                  <td>{{ irpfNecesarioEstatalEuroRetencionIrpf | number:'1.2-2' }}</td>
+                  <td>{{ irpfNecesarioEstatalPorcentajeRetencionIrpf | number:'1.2-2' }}%</td>
+                  <td>{{ irpfNecesarioAutonomicoEuroRetencionIrpf | number:'1.2-2' }}</td>
+                  <td>{{ irpfNecesarioAutonomicoPorcentajeRetencionIrpf | number:'1.2-2' }}%</td>
+                  <td>{{ irpfNecesarioTotalEuroRetencionIrpf | number:'1.2-2' }}</td>
+                  <td>{{ irpfNecesarioTotalPorcentajeRetencionIrpf | number:'1.2-2' }}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card summary-card-span-two">
+        <mat-card-header>
+          <mat-card-title class="summary-card-title-spaced">Borrador Renta</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-scroll-x">
+            <table class="summary-table borrador-renta-table">
+              <thead>
+                <tr>
+                  <th>CONCEPTO</th>
+                  <th>PAGADO €</th>
+                  <th>PAGADO %</th>
+                  <th>BORRADOR €</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>RETENCION IRPF</td>
+                  <td>{{ borradorRetencionIrpfPagadoEuro | number:'1.2-2' }}</td>
+                  <td>{{ borradorRetencionIrpfPagadoPercent | number:'1.2-2' }}%</td>
+                  <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
+                    {{ borradorRetencionIrpfEuro | number:'1.2-2' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>RETENCION CAPITAL</td>
+                  <td>{{ borradorRetencionCapitalPagadoEuro | number:'1.2-2' }}</td>
+                  <td>{{ borradorRetencionCapitalPagadoPercent | number:'1.2-2' }}%</td>
+                  <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
+                    {{ borradorRetencionCapitalEuro | number:'1.2-2' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>CUOTAS LIQUIDAS</td>
+                  <td>{{ borradorCuotasLiquidasPagadoEuro | number:'1.2-2' }}</td>
+                  <td>{{ borradorCuotasLiquidasPagadoPercent | number:'1.2-2' }}%</td>
+                  <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
+                    {{ borradorCuotasLiquidasEuro | number:'1.2-2' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>

@@ -1,44 +1,112 @@
 
-## 0. Visión general
+# Reglas funcionales globales
 
-Esta aplicación debera permitir introducir los datos de la nomina del usuario mes a mes para poder calcular el IRPF a final del año. Por tanto se intenta modelar la **vida fiscal y financiera anual** de un empleado en España:
+## 1. Propósito de la aplicación
 
-1. **12 secciones mensuales colapsables** (`Enero` … `Diciembre`) con estructura idéntica → simulan la nómina del mes y el reparto de gastos/ahorro/inversión.
-2. **2 secciones de pagas extra colapsables** (`Extra1`, `Extra2`) con estructura igual a las mensuales pero **sin cotización SS** y con **retención IRPF EXTRA** distinta.
+Esta aplicación permite introducir los datos de nómina del usuario mes a mes para calcular el impacto fiscal anual y estimar el resultado final del IRPF en España.
 
-Modelo de datos sugerido:
+El objetivo no es solo representar una nómina mensual, sino modelar la vida fiscal anual del usuario a partir de:
+- ingresos periódicos,
+- pagas extra,
+- cotizaciones sociales,
+- retenciones IRPF,
+- acumulados anuales,
+- configuración fiscal final.
 
-INPUTS USUARIOS
-- `year`: array object
-    - `month`: array object (14)
-        - `empleado`: { nombre, nempleado, ndias, pagasextra, horasextra, percentajeDeducibleSeguroMedico, trienios } array creciente
-        - `salario`: { sueldoBase, antiguedad, plusConvenio, plusVoluntario, pactoNoCompetencia, dedicacionPlena } array creciente
-        - `beneficios`: { seguroMedico, tickets, seguroVida } array creciente
-        - `impuestos`: { irpf}
+## 2. Alcance global del dominio
 
----
+La aplicación modela un único ejercicio fiscal anual.
 
+Ese ejercicio anual está compuesto por:
+- meses ordinarios,
+- pagas extra,
+- un resumen anual final.
 
-## 3. Vistas sugeridas para la app
+La estructura detallada de cada sección mensual y del resumen anual se define en:
+- docs/1-req-nominas-rules/00-index.md
+- docs/1-req-nominas-rules/10-monthly/
+- docs/1-req-nominas-rules/20-annual-summary/
 
-0. **header** - Se debe crear un header con una altura de 50 px que no se oculte cuando haces scroll
-1. **Dashboard principal**: Debe tener unos margenes laterales deun 10%
-1.1 **Panel anual** - Una vista inicial donde indique el año 2026 y que tenga un panel o estructura principal para navegar entre años. Representaría la renta de cada año.
-1.2 **Sección mensual colapsable** - Una sección mensual dentro de la vista anual que representa cada uno de los meses del año más `Extra1` (entre Junio y Julio) y `Extra2` (después de diciembre).
-1.3 **Calculo de nominas** - Dentro de cada sección mensual colapsable que es igual, el usuario deberá poder introducir los datos de su nomina y poder calcular automáticamente los valores de su nomina mensual y al final de año.
+## 3. Modelo de datos canónico
 
----
+Modelo conceptual mínimo:
 
-## 4. Validaciones y casos borde
+- `year`
+    - `months`
+        - `employee`
+        - `salary`
+        - `benefits`
+        - `taxes`
+    - `annualSummary`
+        - `socialSecurityConfig`
+        - `irpfStateConfig`
+        - `irpfRegionalConfig`
+        - `taxExemptions`
+        - `contributionBase`
+        - `finalTaxResult`
 
-- Días del mes ≠ 30 (febrero, meses con altas/bajas) → recalcular prorratas.
-- Cambio de antigüedad a mitad de año (nuevo trienio).
-- Cambio de CCAA durante el año → IRPF a prorrata por días en cada CCAA.
-- Pérdidas patrimoniales: compensación entre ganancias y pérdidas dentro de la misma base (4 años).
-- Ingresos < mínimo personal → cuota líquida = 0.
-- Inversión `D2` con BBVA neto → recalcular bruto antes de sumar a la base.
-- División por cero (`#DIV/0!` aparece en `J7`, `J14`, `J15` cuando D=0): tratar como 0 % en UI.
+### Reglas del modelo
+1. Todos los meses pertenecen a un único año fiscal.
+2. Los acumulados anuales dependen del orden temporal de los meses.
+3. Las pagas extra forman parte del mismo ejercicio anual.
+4. La configuración anual afecta a los cálculos finales y, en algunos casos, alimenta cálculos mensuales.
 
----
+## 4. Invariantes transversales
 
-**Fin del documento.**
+Estas reglas aplican a toda la aplicación, independientemente de la feature concreta.
+
+1. El cálculo anual debe ser coherente con la suma de los cálculos mensuales.
+2. Cualquier cambio en datos de un mes debe propagarse a sus acumulados y al resumen anual.
+3. Ninguna división por cero debe romper la interfaz ni producir errores visibles al usuario.
+4. Cuando un cálculo no sea aplicable, la UI debe mostrar `0`, vacío controlado o un estado seguro equivalente.
+5. Las fórmulas no deben simplificarse sin validación funcional explícita.
+6. Los cálculos deben preservar trazabilidad entre origen mensual y resultado anual.
+7. La aplicación debe tolerar cambios de contexto durante el año sin romper el acumulado.
+
+## 5. Casos borde transversales
+
+Estos casos afectan a varias áreas del dominio y no solo a una feature concreta.
+
+1. Cambios de Comunidad Autónoma durante el año.
+2. Ingresos anuales por debajo del mínimo personal.
+3. Divisiones por cero en cálculos porcentuales.
+4. Reglas distintas entre meses ordinarios y pagas extra.
+5. Recalculo en cascada cuando cambia un dato con impacto acumulado.
+
+## 6. Fuera de alcance actual o pendiente de modularización
+
+Estos temas no deben mezclarse con la lógica principal de nóminas mientras no tengan estructura propia:
+
+- pérdidas patrimoniales,
+- compensación entre ganancias y pérdidas,
+- inversiones u otros productos financieros,
+- reglas específicas de entidades concretas,
+- dominios fiscales no relacionados con nómina.
+
+Si en el futuro se implementan, deben vivir en un módulo funcional separado.
+
+## 7. Relación con otros documentos
+
+### Fuente de detalle funcional
+- docs/1-req-nominas-rules/00-index.md
+- docs/1-req-nominas-rules/10-monthly/
+- docs/1-req-nominas-rules/20-annual-summary/
+
+### Fuente de reglas técnicas
+- docs/dev-rules.md
+
+## 8. Principio de mantenimiento documental
+
+Este documento debe mantenerse corto y estable.
+
+Su función es definir:
+- contexto transversal,
+- invariantes globales,
+- límites del dominio,
+- relación entre módulos.
+
+No debe contener:
+- fórmulas detalladas por tabla,
+- layout detallado por pantalla,
+- comportamiento específico de una única feature,
+- duplicación de reglas ya documentadas en módulos funcionales.

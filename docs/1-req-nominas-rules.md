@@ -1,4 +1,4 @@
-
+<!-- 
 
 ## 1. Secciones mensuales colapsables: `Enero` … `Diciembre` y `Resumen`
 
@@ -508,9 +508,59 @@ FILAS FIJAS - Son campos editables y calculados
 4 - TOTAL -> Caclulo automático: sumatorio de esta misma columna pero solo las filas 1 y 2 (RENDIMIENTO TRABAJO + SS EMPLEADO)
 5 - BASE IRPF -> Calculo automatico: (Columna 2 fila 3 TOTAL de la tabla RESUMEN NOMINAS - TOTAL de la fila anterior)
 
+#### 2.2.4 CARD: `IRPF Necesario`
+#### 2.2.4.1 TABLA: `IRPF Necesario`
+
+Esta tabla indicara los impuestos necesarios para cubrir la renta:
+
+Tabla con 7 columnas:
+
+COLUMNA 1 (no editable) -> `CONCEPTO`
+FILAS FIJAS
+1 - Label: `RETENCION IRPF`
+2 - Label: `RETENCION CAPITAL`
+3 - Label: `CUOTAS LIQUIDAS`
+
+COLUMNA 2 -> `ESTATAL €`
+FILAS FIJAS - Son campos editables y calculados
+1 - RETENCION IRPF -> Calculo automático: (COLUMNA 4 IMPUESTOS fila 4 TOTAL de la tabla de IRPF ESTATAL - COLUMNA 2 IMPORTE ESTATAL FILA 6 IMPUESTOS de la tabla EXENCION DE IMPUESTOS)
+2 - RETENCION CAPITAL -> 0
+3 - CUOTAS LIQUIDAS -> Calculo automático: Sumatorio de las filas de esta columna
+
+COLUMNA 3 -> `ESTATAL %`
+FILAS FIJAS - Son campos editables y calculados
+1 - RETENCION IRPF -> Calculo automático: (COLUMNA 2 ESTATAL € RETENCION IRPF FILA 1 de esta misma tabla / COLUMNA 2 IMPORTE TOTAL FILA 5  BASE IRPF de la tabla BASE DE COTIZACION)
+2 - RETENCION CAPITAL -> 0
+3 - CUOTAS LIQUIDAS -> Calculo automático: Sumatorio de las filas de esta columna
+
+COLUMNA 4 -> `AUTONOMICO €`
+FILAS FIJAS - Son campos editables y calculados
+1 - RETENCION IRPF -> Calculo automático: (COLUMNA 4 IMPUESTOS fila 4 TOTAL de la tabla de IRPF AUTONOMICO - COLUMNA 3 IMPORTE AUTONOMICO FILA 6 IMPUESTOS de la tabla EXENCION DE IMPUESTOS)
+2 - RETENCION CAPITAL -> 0
+3 - CUOTAS LIQUIDAS -> Calculo automático: Sumatorio de las filas de esta columna
+
+COLUMNA 5 -> `AUTONOMICO %`
+FILAS FIJAS - Son campos editables y calculados
+1 - RETENCION IRPF -> Calculo automático: (COLUMNA 4 AUTONOMICO € RETENCION IRPF FILA 1 de esta misma tabla / COLUMNA 3 IMPORTE PAGADO FILA 5 BASE IRPF de la tabla BASE DE COTIZACION)
+2 - RETENCION CAPITAL -> 0
+3 - CUOTAS LIQUIDAS -> Calculo automático: Sumatorio de las filas de esta columna
+
+COLUMNA 6 -> `TOTAL €`
+FILAS FIJAS - Son campos editables y calculados
+1 - RETENCION IRPF -> Calculo automático: (COLUMNA 2 ESTATAL € fila 1 RETENCION IRPF esta tabla misma tabla + COLUMNA 3 AUTONOMICO € fila 1 RETENCION IRPF esta tabla misma tabla)
+2 - RETENCION CAPITAL -> 0
+3 - CUOTAS LIQUIDAS -> Calculo automático: Sumatorio de las filas de esta columna
+
+COLUMNA 7 -> `TOTAL %`
+FILAS FIJAS - Son campos editables y calculados
+1 - RETENCION IRPF -> Calculo automático: (COLUMNA 2 ESTATAL % fila 1 RETENCION IRPF esta tabla misma tabla + COLUMNA 3 AUTONOMICO % fila 1 RETENCION IRPF esta tabla misma tabla)
+2 - RETENCION CAPITAL -> 0
+3 - CUOTAS LIQUIDAS -> Calculo automático: Sumatorio de las filas de esta columna
+
+
 **Fin del documento.**
 
 
 
 
-
+ -->

@@ -24,6 +24,12 @@
 - Las cards deben estar separadas por unos 20 px
 - En Resumen > Configuracion Renta y Renta, los titulos de las cards Seguridad Social y Resumen de nominas deben llevar padding-bottom de 10px para separarlos de la tabla
 
+## Layout global
+- Crear un header fijo de 50 px de alto que permanezca visible durante el scroll
+- El dashboard principal debe mantener margenes laterales aproximados del 10%
+- La vista anual debe mostrar el año activo y una estructura principal preparada para navegar entre ejercicios
+- Las secciones mensuales y el resumen anual deben vivir dentro de la misma vista anual como bloques consistentes
+
 ## Validaciones
 - Validar todos los inputs numéricos
 - Manejar errores explícitamente
@@ -32,7 +38,9 @@
 ## Integración con lógica (Excel)
 - Las fórmulas deben replicar exactamente los siguientes ficheros:
     - 0-req-global-rules.md: Contexto transversal de la aplicacion
-    - 1-req-nominas-rules.md: Contexto de la lógica de las nominas de cada mas
+    - 1-req-nominas-rules/00-index.md: Mapa funcional de nóminas
+    - 1-req-nominas-rules/10-monthly/: Lógica mensual por feature
+    - 1-req-nominas-rules/20-annual-summary/: Lógica anual por feature
 - No simplificar cálculos sin validar
 
 ## Comportamiento esperado de la IA
