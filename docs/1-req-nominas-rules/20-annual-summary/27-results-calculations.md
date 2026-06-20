@@ -17,6 +17,7 @@ Tabla con 4 columnas: Concepto | PAGADO € | PAGADO % | BORRADOR €
 | 1 | Retención IRPF | automático | automático | automático |
 | 2 | Retención Capital | automático | automático | automático |
 | 3 | **CUOTAS LIQUIDAS** | automático | automático | automático |
+| 4 | SS Empleado | automático | automático | automático |
 
 ## Fórmulas
 
@@ -86,6 +87,26 @@ Si Diferencia < 0: Administración devuelve -> Colorear los numeros en verde
 Si Diferencia ≈ 0: Compensado -> Colorear los numeros en verde
 ```
 
+### SS Empleado (fila 4)
+
+**PAGADO € (Columna 2)**
+```
+= SS Empleado Pagado Base de cotizacion (Columna 3 fila 2 en 25-contribution-base.md)
+```
+
+**PAGADO % (Columna 3)**
+```
+= (Borrador Renta PAGADO € fila 4 / TOTAL RESUMEN NOMINAS (fila 3 col 2 en 23-annual-income-summary.md)) × 100
+```
+
+Validación: dividir por 0 → mostrar 0%.
+
+**BORRADOR € (Columna 4)**
+```
+= SS Empleado Total Base de cotizacion (Columna 2 fila 2 en 25-contribution-base.md)
+  - Borrador renta PAGADO € fila 4
+```
+
 ## Comportamiento UI
 - Todas las filas y columnas: solo lectura
 - Formato moneda (€) con 2 decimales
@@ -99,6 +120,8 @@ Si Diferencia ≈ 0: Compensado -> Colorear los numeros en verde
 - **TOTAL Resumen de nominas**: 23-annual-income-summary.md (fila 3, Col2)
 - **Cuotas liquidas necesarias**: 26-final-tax-calculation.md (fila 3, Col6)
 - **Retención capital necesaria**: 26-final-tax-calculation.md (fila 2, Col6)
+- **SS Empleado Total** (Col2, fila 2): 25-contribution-base.md
+- **SS Empleado Pagado** (Col3, fila 2): 25-contribution-base.md
 
 ## Dependencias de salida
 - **Diferencia final (BORRADOR € en CUOTAS LIQUIDAS)** para decidir pago/devolución

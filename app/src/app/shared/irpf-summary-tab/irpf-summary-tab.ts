@@ -235,6 +235,22 @@ export class IrpfSummaryTabComponent implements OnInit {
     return 0 - this.borradorRetencionCapitalPagadoEuro;
   }
 
+  get borradorSsEmpleadoPagadoEuro(): number {
+    return this.annualSsEmpleadoPaid;
+  }
+
+  get borradorSsEmpleadoPagadoPercent(): number {
+    if (this.total <= 0) {
+      return 0;
+    }
+
+    return (this.borradorSsEmpleadoPagadoEuro / this.total) * 100;
+  }
+
+  get borradorSsEmpleadoEuro(): number {
+    return this.baseCotizacionSsEmpleadoTotal - this.borradorSsEmpleadoPagadoEuro;
+  }
+
   get borradorCuotasLiquidasPagadoEuro(): number {
     return this.borradorRetencionIrpfPagadoEuro + this.borradorRetencionCapitalPagadoEuro;
   }
