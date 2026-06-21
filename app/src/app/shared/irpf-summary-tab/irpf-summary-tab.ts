@@ -251,6 +251,26 @@ export class IrpfSummaryTabComponent implements OnInit {
     return this.baseCotizacionSsEmpleadoTotal - this.borradorSsEmpleadoPagadoEuro;
   }
 
+  get borradorSsEmpresaPagadoEuro(): number {
+    return this.annualSsEmpresaPaid;
+  }
+
+  get borradorSsEmpresaPagadoPercent(): number {
+    if (this.total <= 0) {
+      return 0;
+    }
+
+    return (this.borradorSsEmpresaPagadoEuro / this.total) * 100;
+  }
+
+  get borradorSsEmpresaEuro(): number {
+    return this.baseCotizacionSsEmpresaTotal - this.borradorSsEmpresaPagadoEuro;
+  }
+
+  get borradorSsEmpresaIsPayable(): boolean {
+    return this.borradorSsEmpresaEuro > 0;
+  }
+
   get borradorCuotasLiquidasPagadoEuro(): number {
     return this.borradorRetencionIrpfPagadoEuro + this.borradorRetencionCapitalPagadoEuro;
   }
