@@ -251,6 +251,10 @@ export class IrpfSummaryTabComponent implements OnInit {
     return this.baseCotizacionSsEmpleadoTotal - this.borradorSsEmpleadoPagadoEuro;
   }
 
+  get borradorSsEmpleadoIsPayable(): boolean {
+    return this.borradorSsEmpleadoEuro > 0;
+  }
+
   get borradorSsEmpresaPagadoEuro(): number {
     return this.annualSsEmpresaPaid;
   }

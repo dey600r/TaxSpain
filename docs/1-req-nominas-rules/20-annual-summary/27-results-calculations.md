@@ -108,6 +108,13 @@ Validación: dividir por 0 → mostrar 0%.
   - Borrador renta PAGADO € fila 4
 ```
 
+**Comparación con Retenciones Pagadas**
+```
+Si Diferencia > 0: Usuario debe pagar -> Colorear los numeros en rojo
+Si Diferencia < 0: Administración devuelve -> Colorear los numeros en verde
+Si Diferencia ≈ 0: Compensado -> Colorear los numeros en verde
+```
+
 ### SS Empresa (fila 5)
 
 **PAGADO € (Columna 2)**
