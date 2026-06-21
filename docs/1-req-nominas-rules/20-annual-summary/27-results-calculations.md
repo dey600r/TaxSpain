@@ -18,6 +18,7 @@ Tabla con 4 columnas: Concepto | PAGADO € | PAGADO % | BORRADOR €
 | 2 | Retención Capital | automático | automático | automático |
 | 3 | **CUOTAS LIQUIDAS** | automático | automático | automático |
 | 4 | SS Empleado | automático | automático | automático |
+| 5 | SS Empresa | automático | automático | automático |
 
 ## Fórmulas
 
@@ -107,6 +108,40 @@ Validación: dividir por 0 → mostrar 0%.
   - Borrador renta PAGADO € fila 4
 ```
 
+**Comparación con Retenciones Pagadas**
+```
+Si Diferencia > 0: Usuario debe pagar -> Colorear los numeros en rojo
+Si Diferencia < 0: Administración devuelve -> Colorear los numeros en verde
+Si Diferencia ≈ 0: Compensado -> Colorear los numeros en verde
+```
+
+### SS Empresa (fila 5)
+
+**PAGADO € (Columna 2)**
+```
+= SS Empresa Pagado Base de cotizacion (Columna 3 fila 3 en 25-contribution-base.md)
+```
+
+**PAGADO % (Columna 3)**
+```
+= (Borrador Renta PAGADO € fila 5 / TOTAL RESUMEN NOMINAS (fila 3 col 2 en 23-annual-income-summary.md)) × 100
+```
+
+Validación: dividir por 0 → mostrar 0%.
+
+**BORRADOR € (Columna 4)**
+```
+= SS Empresa Total Base de cotizacion (Columna 2 fila 3 en 25-contribution-base.md)
+  - Borrador renta PAGADO € fila 5
+```
+
+**Comparación con Retenciones Pagadas**
+```
+Si Diferencia > 0: Usuario debe pagar -> Colorear los numeros en rojo
+Si Diferencia < 0: Administración devuelve -> Colorear los numeros en verde
+Si Diferencia ≈ 0: Compensado -> Colorear los numeros en verde
+```
+
 ## Comportamiento UI
 - Todas las filas y columnas: solo lectura
 - Formato moneda (€) con 2 decimales
@@ -122,6 +157,8 @@ Validación: dividir por 0 → mostrar 0%.
 - **Retención capital necesaria**: 26-final-tax-calculation.md (fila 2, Col6)
 - **SS Empleado Total** (Col2, fila 2): 25-contribution-base.md
 - **SS Empleado Pagado** (Col3, fila 2): 25-contribution-base.md
+- **SS Empresa Total** (Col2, fila 3): 25-contribution-base.md
+- **SS Empresa Pagado** (Col3, fila 3): 25-contribution-base.md
 
 ## Dependencias de salida
 - **Diferencia final (BORRADOR € en CUOTAS LIQUIDAS)** para decidir pago/devolución
