@@ -19,6 +19,7 @@ Tabla con 4 columnas: Concepto | PAGADO € | PAGADO % | BORRADOR €
 | 3 | **CUOTAS LIQUIDAS** | automático | automático | automático |
 | 4 | SS Empleado | automático | automático | automático |
 | 5 | SS Empresa | automático | automático | automático |
+| 6 | TOTAL | automático | automático | automático |
 
 ## Fórmulas
 
@@ -135,6 +136,27 @@ Validación: dividir por 0 → mostrar 0%.
   - Borrador renta PAGADO € fila 5
 ```
 
+### TOTAL (fila 6)
+
+Fila de consolidado final del borrador renta. Resume el resultado conjunto de CUOTAS LIQUIDAS, SS Empleado y SS Empresa.
+
+**PAGADO € (Columna 2)**
+```
+= CUOTAS LIQUIDAS COLUMNA 2 PAGADO € + SS EMPLEADO COLUMNA 2 PAGADO € + SS EMPRESA COLUMNA 2 PAGADO €
+```
+
+**PAGADO % (Columna 3)**
+```
+= CUOTAS LIQUIDAS COLUMNA 3 PAGADO % + SS EMPLEADO COLUMNA 3 PAGADO % + SS EMPRESA COLUMNA 3 PAGADO %
+```
+
+**BORRADOR € (Columna 4)**
+```
+= CUOTAS LIQUIDAS COLUMNA 4 BORRADOR € + SS EMPLEADO COLUMNA 4 BORRADOR € + SS EMPRESA COLUMNA 4 BORRADOR €
+```
+
+Validación: si algún valor origen no existe, tratarlo como 0 para mantener la suma consistente.
+
 **Comparación con Retenciones Pagadas**
 ```
 Si Diferencia > 0: Usuario debe pagar -> Colorear los numeros en rojo
@@ -159,10 +181,15 @@ Si Diferencia ≈ 0: Compensado -> Colorear los numeros en verde
 - **SS Empleado Pagado** (Col3, fila 2): 25-contribution-base.md
 - **SS Empresa Total** (Col2, fila 3): 25-contribution-base.md
 - **SS Empresa Pagado** (Col3, fila 3): 25-contribution-base.md
+- **Sumatorios internos para TOTAL (fila 6)**: valores calculados en esta misma tabla para filas 3 (CUOTAS LIQUIDAS), 4 (SS Empleado) y 5 (SS Empresa), columnas 2, 3 y 4
 
 ## Dependencias de salida
 - **Diferencia final (BORRADOR € en CUOTAS LIQUIDAS)** para decidir pago/devolución
 - **Porcentaje pagado acumulado** frente al total anual declarado
+- **Consolidado final TOTAL (fila 6)**:
+  - Col2: total anual pagado
+  - Col3: porcentaje total pagado
+  - Col4: saldo final borrador (pago o devolución)
 - **Indicador visual de estado**:
   - > 0: pendiente de pago (rojo)
   - <= 0: devolución o compensado (verde)

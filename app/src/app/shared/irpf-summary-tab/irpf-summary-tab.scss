@@ -33,6 +33,16 @@
   min-width: 920px;
 }
 
+.borrador-renta-table-wrapper .table-scroll-x .borrador-renta-table {
+  min-width: auto;
+  width: 100%;
+}
+
+.borrador-renta-table th,
+.borrador-renta-table td {
+  padding: 6px 8px;
+}
+
 .summary-row-group {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -54,6 +64,7 @@
 .summary-table th,
 .summary-table td {
   padding: 8px 10px;
+  font-size: 0.78rem;
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
@@ -68,10 +79,14 @@
 }
 
 .irpf-necesario-table th,
-.irpf-necesario-table td,
+.irpf-necesario-table td {
+  white-space: nowrap;
+}
+
 .borrador-renta-table th,
 .borrador-renta-table td {
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .status-payable {
@@ -82,6 +97,107 @@
 .status-refundable {
   color: #2e7d32;
   font-weight: 600;
+}
+
+.borrador-renta-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.borrador-renta-table-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.borrador-renta-chart-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.results-chart-container {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-pie {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #b3261e 0deg var(--segment-1),
+    #f9c80e var(--segment-1) var(--segment-2),
+    #1976d2 var(--segment-2) var(--segment-3),
+    #2e7d32 var(--segment-3) 360deg
+  );
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--mat-sys-shadow) 15%, transparent);
+}
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 2px dashed var(--mat-sys-outline-variant);
+  color: var(--mat-sys-outline-variant);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legend-irpf .legend-color {
+  background-color: #b3261e;
+}
+
+.legend-ss-empleado .legend-color {
+  background-color: #f9c80e;
+}
+
+.legend-ss-empresa .legend-color {
+  background-color: #1976d2;
+}
+
+.legend-resto .legend-color {
+  background-color: #2e7d32;
+}
+
+.legend-label {
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.legend-value {
+  flex-shrink: 0;
+  color: var(--mat-sys-outline);
+  font-size: 0.75rem;
 }
 
 .editable-cell {
@@ -172,5 +288,18 @@
 
   .summary-row-group {
     grid-template-columns: 1fr;
+  }
+
+  .borrador-renta-content {
+    flex-direction: column;
+  }
+
+  .results-chart-container {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .chart-legend {
+    min-width: auto;
   }
 }

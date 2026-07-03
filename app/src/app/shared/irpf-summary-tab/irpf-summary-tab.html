@@ -437,60 +437,116 @@
         <mat-card-header>
           <mat-card-title class="summary-card-title-spaced">Borrador Renta</mat-card-title>
         </mat-card-header>
-        <mat-card-content>
-          <div class="table-scroll-x">
-            <table class="summary-table borrador-renta-table">
-              <thead>
-                <tr>
-                  <th>CONCEPTO</th>
-                  <th>PAGADO €</th>
-                  <th>PAGADO %</th>
-                  <th>BORRADOR €</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>RETENCION IRPF</td>
-                  <td>{{ borradorRetencionIrpfPagadoEuro | number:'1.2-2' }}</td>
-                  <td>{{ borradorRetencionIrpfPagadoPercent | number:'1.2-2' }}%</td>
-                  <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
-                    {{ borradorRetencionIrpfEuro | number:'1.2-2' }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>RETENCION CAPITAL</td>
-                  <td>{{ borradorRetencionCapitalPagadoEuro | number:'1.2-2' }}</td>
-                  <td>{{ borradorRetencionCapitalPagadoPercent | number:'1.2-2' }}%</td>
-                  <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
-                    {{ borradorRetencionCapitalEuro | number:'1.2-2' }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>CUOTAS LIQUIDAS</td>
-                  <td>{{ borradorCuotasLiquidasPagadoEuro | number:'1.2-2' }}</td>
-                  <td>{{ borradorCuotasLiquidasPagadoPercent | number:'1.2-2' }}%</td>
-                  <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
-                    {{ borradorCuotasLiquidasEuro | number:'1.2-2' }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>SS EMPLEADO</td>
-                  <td>{{ borradorSsEmpleadoPagadoEuro | number:'1.2-2' }}</td>
-                  <td>{{ borradorSsEmpleadoPagadoPercent | number:'1.2-2' }}%</td>
-                  <td [ngClass]="borradorSsEmpleadoIsPayable ? 'status-payable' : 'status-refundable'">
-                    {{ borradorSsEmpleadoEuro | number:'1.2-2' }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>SS EMPRESA</td>
-                  <td>{{ borradorSsEmpresaPagadoEuro | number:'1.2-2' }}</td>
-                  <td>{{ borradorSsEmpresaPagadoPercent | number:'1.2-2' }}%</td>
-                  <td [ngClass]="borradorSsEmpresaIsPayable ? 'status-payable' : 'status-refundable'">
-                    {{ borradorSsEmpresaEuro | number:'1.2-2' }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <mat-card-content class="borrador-renta-content">
+          <div class="borrador-renta-table-wrapper">
+            <div class="table-scroll-x">
+              <table class="summary-table borrador-renta-table">
+                <thead>
+                  <tr>
+                    <th>CONCEPTO</th>
+                    <th>PAGADO €</th>
+                    <th>PAGADO %</th>
+                    <th>BORRADOR €</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>RETENCION IRPF</td>
+                    <td>{{ borradorRetencionIrpfPagadoEuro | number:'1.2-2' }}</td>
+                    <td>{{ borradorRetencionIrpfPagadoPercent | number:'1.2-2' }}%</td>
+                    <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
+                      {{ borradorRetencionIrpfEuro | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>RETENCION CAPITAL</td>
+                    <td>{{ borradorRetencionCapitalPagadoEuro | number:'1.2-2' }}</td>
+                    <td>{{ borradorRetencionCapitalPagadoPercent | number:'1.2-2' }}%</td>
+                    <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
+                      {{ borradorRetencionCapitalEuro | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CUOTAS LIQUIDAS</td>
+                    <td>{{ borradorCuotasLiquidasPagadoEuro | number:'1.2-2' }}</td>
+                    <td>{{ borradorCuotasLiquidasPagadoPercent | number:'1.2-2' }}%</td>
+                    <td [ngClass]="borradorIsPayable ? 'status-payable' : 'status-refundable'">
+                      {{ borradorCuotasLiquidasEuro | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>SS EMPLEADO</td>
+                    <td>{{ borradorSsEmpleadoPagadoEuro | number:'1.2-2' }}</td>
+                    <td>{{ borradorSsEmpleadoPagadoPercent | number:'1.2-2' }}%</td>
+                    <td [ngClass]="borradorSsEmpleadoIsPayable ? 'status-payable' : 'status-refundable'">
+                      {{ borradorSsEmpleadoEuro | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>SS EMPRESA</td>
+                    <td>{{ borradorSsEmpresaPagadoEuro | number:'1.2-2' }}</td>
+                    <td>{{ borradorSsEmpresaPagadoPercent | number:'1.2-2' }}%</td>
+                    <td [ngClass]="borradorSsEmpresaIsPayable ? 'status-payable' : 'status-refundable'">
+                      {{ borradorSsEmpresaEuro | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>TOTAL</td>
+                    <td>{{ borradorTotalPagadoEuro | number:'1.2-2' }}</td>
+                    <td>{{ borradorTotalPagadoPercent | number:'1.2-2' }}%</td>
+                    <td [ngClass]="borradorTotalIsPayable ? 'status-payable' : 'status-refundable'">
+                      {{ borradorTotalEuro | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="borrador-renta-chart-wrapper">
+            <ng-container *ngIf="borradorResultsChartHasData; else chartEmpty">
+              <div class="results-chart-container">
+                <div class="chart-pie" [style.--segment-1]="borradorResultsChartRetentionIrpfPercent + '%'" 
+                     [style.--segment-2]="(borradorResultsChartRetentionIrpfPercent + borradorResultsChartSsEmpleadoPercent) + '%'"
+                     [style.--segment-3]="(borradorResultsChartRetentionIrpfPercent + borradorResultsChartSsEmpleadoPercent + borradorResultsChartSsEmpresaPercent) + '%'">
+                </div>
+                <div class="chart-legend">
+                  <ng-container *ngIf="borradorResultsChartRetentionIrpf > 0">
+                    <div class="legend-item legend-irpf">
+                      <span class="legend-color"></span>
+                      <span class="legend-label">Retención IRPF</span>
+                      <span class="legend-value">{{ borradorResultsChartRetentionIrpf | number:'1.2-2' }}€ ({{ borradorResultsChartRetentionIrpfPercent | number:'1.2-2' }}%)</span>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="borradorResultsChartSsEmpleado > 0">
+                    <div class="legend-item legend-ss-empleado">
+                      <span class="legend-color"></span>
+                      <span class="legend-label">SS Empleado</span>
+                      <span class="legend-value">{{ borradorResultsChartSsEmpleado | number:'1.2-2' }}€ ({{ borradorResultsChartSsEmpleadoPercent | number:'1.2-2' }}%)</span>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="borradorResultsChartSsEmpresa > 0">
+                    <div class="legend-item legend-ss-empresa">
+                      <span class="legend-color"></span>
+                      <span class="legend-label">SS Empresa</span>
+                      <span class="legend-value">{{ borradorResultsChartSsEmpresa | number:'1.2-2' }}€ ({{ borradorResultsChartSsEmpresaPercent | number:'1.2-2' }}%)</span>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="borradorResultsChartResto > 0">
+                    <div class="legend-item legend-resto">
+                      <span class="legend-color"></span>
+                      <span class="legend-label">Resto</span>
+                      <span class="legend-value">{{ borradorResultsChartResto | number:'1.2-2' }}€ ({{ borradorResultsChartRestoPercent | number:'1.2-2' }}%)</span>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #chartEmpty>
+              <div class="chart-empty">
+                <p>No hay datos</p>
+              </div>
+            </ng-template>
           </div>
         </mat-card-content>
       </mat-card>

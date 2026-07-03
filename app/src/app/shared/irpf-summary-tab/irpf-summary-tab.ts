@@ -295,8 +295,85 @@ export class IrpfSummaryTabComponent implements OnInit {
     return this.borradorCuotasLiquidasEuro > 0;
   }
 
+  get borradorTotalPagadoEuro(): number {
+    return this.borradorCuotasLiquidasPagadoEuro + this.borradorSsEmpleadoPagadoEuro + this.borradorSsEmpresaPagadoEuro;
+  }
+
+  get borradorTotalPagadoPercent(): number {
+    if (this.total <= 0) {
+      return 0;
+    }
+
+    return (this.borradorTotalPagadoEuro / this.total) * 100;
+  }
+
+  get borradorTotalEuro(): number {
+    return this.borradorCuotasLiquidasEuro + this.borradorSsEmpleadoEuro + this.borradorSsEmpresaEuro;
+  }
+
+  get borradorTotalIsPayable(): boolean {
+    return this.borradorTotalEuro > 0;
+  }
+
   get borradorIsCompensated(): boolean {
     return Math.abs(this.borradorCuotasLiquidasEuro) < 0.005;
+  }
+
+  get borradorResultsChartRetentionIrpf(): number {
+    return Math.max(this.borradorRetencionIrpfPagadoEuro, 0);
+  }
+
+  get borradorResultsChartSsEmpleado(): number {
+    return Math.max(this.borradorSsEmpleadoPagadoEuro, 0);
+  }
+
+  get borradorResultsChartSsEmpresa(): number {
+    return Math.max(this.borradorSsEmpresaPagadoEuro, 0);
+  }
+
+  get borradorResultsChartResto(): number {
+    const base = this.salarioBruto + this.borradorSsEmpleadoPagadoEuro + this.borradorSsEmpresaPagadoEuro;
+    const resto = base - this.borradorTotalPagadoEuro;
+    return Math.max(resto, 0);
+  }
+
+  get borradorResultsChartTotal(): number {
+    return this.borradorResultsChartRetentionIrpf
+      + this.borradorResultsChartSsEmpleado
+      + this.borradorResultsChartSsEmpresa
+      + this.borradorResultsChartResto;
+  }
+
+  get borradorResultsChartHasData(): boolean {
+    return this.borradorResultsChartTotal > 0;
+  }
+
+  get borradorResultsChartRetentionIrpfPercent(): number {
+    if (this.borradorResultsChartTotal <= 0) {
+      return 0;
+    }
+    return (this.borradorResultsChartRetentionIrpf / this.borradorResultsChartTotal) * 100;
+  }
+
+  get borradorResultsChartSsEmpleadoPercent(): number {
+    if (this.borradorResultsChartTotal <= 0) {
+      return 0;
+    }
+    return (this.borradorResultsChartSsEmpleado / this.borradorResultsChartTotal) * 100;
+  }
+
+  get borradorResultsChartSsEmpresaPercent(): number {
+    if (this.borradorResultsChartTotal <= 0) {
+      return 0;
+    }
+    return (this.borradorResultsChartSsEmpresa / this.borradorResultsChartTotal) * 100;
+  }
+
+  get borradorResultsChartRestoPercent(): number {
+    if (this.borradorResultsChartTotal <= 0) {
+      return 0;
+    }
+    return (this.borradorResultsChartResto / this.borradorResultsChartTotal) * 100;
   }
 
   refreshSummary(): void {

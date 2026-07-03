@@ -42,6 +42,8 @@ Sección única al final, después de Extra2.
 | [24-tax-exemptions.md](20-annual-summary/24-tax-exemptions.md) | Desgravaciones (mínimo personal, descendientes, etc) |
 | [25-contribution-base.md](20-annual-summary/25-contribution-base.md) | Base de cotización final |
 | [26-final-tax-calculation.md](20-annual-summary/26-final-tax-calculation.md) | Impuesto IRPF necesario |
+| [27-results-calculations.md](20-annual-summary/27-results-calculations.md) | Tabla de borrador renta y consolidado |
+| [28-results-chart.md](20-annual-summary/28-results-chart.md) | Gráfico de quesitos de resultados anuales |
 
 ## Orden de lectura recomendado
 1. Este fichero (orientación general)
