@@ -41,6 +41,7 @@
     - 1-req-nominas-rules/00-index.md: Mapa funcional de nóminas
     - 1-req-nominas-rules/10-monthly/: Lógica mensual por feature
     - 1-req-nominas-rules/20-annual-summary/: Lógica anual por feature
+    - 1-req-nominas-rules/30-yearly/: Lógica de pestañas por año y aislamiento multiejercicio
 - No simplificar cálculos sin validar
 
 ## Comportamiento esperado de la IA

@@ -40,7 +40,7 @@ Incluye: SS empleado, IRPF, IRPF EXTRA, etc.
 
 ### Prorrata Extras (fila 4)
 ```
-= (TOTAL Salario Base Columna 3 de 12-salary-base.md × Pagas Extra) / 12
+= ((Sueldo Base + Antiguedad + PLUS Convenio + PLUS Voluntario + Pacto no competencia + Dedicación plena Columna 3 de 12-salary-base.md) × Pagas Extra) / 12
 ```
 
 Usa "Pagas Extra" de feature 11-employee-data.md

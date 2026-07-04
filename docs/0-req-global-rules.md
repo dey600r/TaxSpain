@@ -15,41 +15,47 @@ El objetivo no es solo representar una nómina mensual, sino modelar la vida fis
 
 ## 2. Alcance global del dominio
 
-La aplicación modela un único ejercicio fiscal anual.
+La aplicación modela uno o varios ejercicios fiscales anuales.
 
-Ese ejercicio anual está compuesto por:
+Cada ejercicio anual está compuesto por:
 - meses ordinarios,
 - pagas extra,
 - un resumen anual final.
+
+Cuando existen varios ejercicios, cada año se gestiona de forma aislada dentro de su propia pestaña de año.
 
 La estructura detallada de cada sección mensual y del resumen anual se define en:
 - docs/1-req-nominas-rules/00-index.md
 - docs/1-req-nominas-rules/10-monthly/
 - docs/1-req-nominas-rules/20-annual-summary/
+- docs/1-req-nominas-rules/30-yearly/
 
 ## 3. Modelo de datos canónico
 
 Modelo conceptual mínimo:
 
-- `year`
-    - `months`
-        - `employee`
-        - `salary`
-        - `benefits`
-        - `taxes`
-    - `annualSummary`
-        - `socialSecurityConfig`
-        - `irpfStateConfig`
-        - `irpfRegionalConfig`
-        - `taxExemptions`
-        - `contributionBase`
-        - `finalTaxResult`
+- `years`
+    - `year`
+        - `months`
+            - `employee`
+            - `salary`
+            - `benefits`
+            - `taxes`
+        - `annualSummary`
+            - `socialSecurityConfig`
+            - `irpfStateConfig`
+            - `irpfRegionalConfig`
+            - `taxExemptions`
+            - `contributionBase`
+            - `finalTaxResult`
 
 ### Reglas del modelo
 1. Todos los meses pertenecen a un único año fiscal.
 2. Los acumulados anuales dependen del orden temporal de los meses.
 3. Las pagas extra forman parte del mismo ejercicio anual.
 4. La configuración anual afecta a los cálculos finales y, en algunos casos, alimenta cálculos mensuales.
+5. Los datos de un año no deben mezclarse con los de otro año.
+6. El cambio de año activo solo cambia el contexto visible, no altera los datos de otros años.
 
 ## 4. Invariantes transversales
 
@@ -62,6 +68,7 @@ Estas reglas aplican a toda la aplicación, independientemente de la feature con
 5. Las fórmulas no deben simplificarse sin validación funcional explícita.
 6. Los cálculos deben preservar trazabilidad entre origen mensual y resultado anual.
 7. La aplicación debe tolerar cambios de contexto durante el año sin romper el acumulado.
+8. La aplicación debe mantener coherencia de aislamiento y persistencia entre pestañas de años distintos.
 
 ## 5. Casos borde transversales
 
@@ -87,10 +94,15 @@ Si en el futuro se implementan, deben vivir en un módulo funcional separado.
 
 ## 7. Relación con otros documentos
 
+### Fuente de funcionalidades globales de layout y shell
+- docs/0-req-header/10-header-right.md
+- docs/0-req-header/11-header-left.md
+
 ### Fuente de detalle funcional
 - docs/1-req-nominas-rules/00-index.md
 - docs/1-req-nominas-rules/10-monthly/
 - docs/1-req-nominas-rules/20-annual-summary/
+- docs/1-req-nominas-rules/30-yearly/
 
 ### Fuente de reglas técnicas
 - docs/dev-rules.md

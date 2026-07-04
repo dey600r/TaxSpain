@@ -1,7 +1,7 @@
 # Reglas funcionales de nóminas
 
 ## Propósito
-Define estructura, fórmulas y comportamientos para nóminas mensuales y declaración anual de IRPF en España.
+Define estructura, fórmulas y comportamientos para nóminas mensuales, declaración anual de IRPF y gestión multiejercicio por pestañas de año en España.
 
 ## Estructura general
 
@@ -45,14 +45,23 @@ Sección única al final, después de Extra2.
 | [27-results-calculations.md](20-annual-summary/27-results-calculations.md) | Tabla de borrador renta y consolidado |
 | [28-results-chart.md](20-annual-summary/28-results-chart.md) | Gráfico de quesitos de resultados anuales |
 
+### Área multiejercicio (30-yearly/)
+Gestión de pestañas por año y aislamiento de datos por ejercicio fiscal.
+
+| Fichero | Propósito |
+|---------|----------|
+| [31-years-tab.md](30-yearly/31-years-tab.md) | Pestañas de años: alta, edición, borrado y ordenación automática por año |
+
 ## Orden de lectura recomendado
 1. Este fichero (orientación general)
-2. [21-configuration-social-security.md](20-annual-summary/21-configuration-social-security.md) (parámetros fijos que alimentan todos los meses)
-3. [22-configuration-irpf-brackets.md](20-annual-summary/22-configuration-irpf-brackets.md) (tramos de IRPF)
-4. [11-employee-data.md](10-monthly/11-employee-data.md) hasta [17-partitions-chart.md](10-monthly/17-partitions-chart.md) (estructura repetible mensual)
-5. [23-annual-income-summary.md](20-annual-summary/23-annual-income-summary.md) hasta [26-final-tax-calculation.md](20-annual-summary/26-final-tax-calculation.md) (cálculos finales)
+2. [31-years-tab.md](30-yearly/31-years-tab.md) (contexto de gestión por año y aislamiento entre ejercicios)
+3. [21-configuration-social-security.md](20-annual-summary/21-configuration-social-security.md) (parámetros fijos que alimentan todos los meses)
+4. [22-configuration-irpf-brackets.md](20-annual-summary/22-configuration-irpf-brackets.md) (tramos de IRPF)
+5. [11-employee-data.md](10-monthly/11-employee-data.md) hasta [17-partitions-chart.md](10-monthly/17-partitions-chart.md) (estructura repetible mensual)
+6. [23-annual-income-summary.md](20-annual-summary/23-annual-income-summary.md) hasta [26-final-tax-calculation.md](20-annual-summary/26-final-tax-calculation.md) (cálculos finales)
 
 ## Reglas de sincronización
 - Si cambia una fórmula en área mensual, revisar que los acumulados (16) y resumen anual (23-26) siguen siendo coherentes.
 - Los porcentajes de SS (21) alimentan todas las nóminas mensuales (14).
 - Los tramos IRPF (22) se usan en resumen anual (26).
+- Si cambia la lógica de pestañas por año (31), validar que el aislamiento de estados por ejercicio sigue intacto para mensual y anual.

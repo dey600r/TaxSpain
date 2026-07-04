@@ -45,6 +45,16 @@ export const DEFAULT_SOCIAL_SECURITY_PERCENTAGES: SocialSecurityPercentages = {
 })
 export class MonthFormService {
 
+  private readonly PRORRATA_BASE_CONCEPTS = new Set([
+    'Sueldo Base',
+    'Antiguedad',
+    'PLUS Convenio',
+    'PLUS Voluntario',
+    'Pacto no competencia',
+    'Dedicacion plena',
+    'Dedicación plena'
+  ]);
+
   // Función pura para calcular antigüedad
   calculateAntiguedad(sueldoBase: number, trienios: number): number {
     return (sueldoBase / 20) * trienios;
@@ -121,7 +131,7 @@ export class MonthFormService {
     // BASE SS debe usar la COLUMNA 2 (devengos) de BENEFICIOS.
     const totalBeneficiosColumna2 = benefits.items.reduce((sum, item) => sum + item.devengos, 0);
     const seguroMedico = benefits.items.find(b => b.concepto === 'Seguro Medico')?.devengos || 0;
-    const prorrataExtras = (baseSalary * employee.pagasextra) / 12;
+    const prorrataExtras = this.calculateProrrataExtras(salary, employee);
     const baseSS = baseSalary + totalBeneficiosColumna2 - seguroMedico + prorrataExtras;
     const baseIRPF = baseSalary + seguroMedico;
 
@@ -215,5 +225,22 @@ export class MonthFormService {
   // Calcular neto a cobrar (aproximado)
   calculateNeto(salary: SalaryData, benefits: BenefitsData, taxes: TaxesData): number {
     return salary.totalDevengos + benefits.totalDevengos - taxes.totalDeduccionesEmpleado;
+  }
+
+  calculateProrrataExtras(salary: SalaryData, employee: EmployeeData): number {
+    const pagasExtra = employee.pagasextra ?? 0;
+    if (pagasExtra === 0) {
+      return 0;
+    }
+
+    const prorrataBase = salary.items.reduce((sum, item) => {
+      if (!this.PRORRATA_BASE_CONCEPTS.has(item.concepto)) {
+        return sum;
+      }
+
+      return sum + item.devengos;
+    }, 0);
+
+    return (prorrataBase * pagasExtra) / 12;
   }
 }

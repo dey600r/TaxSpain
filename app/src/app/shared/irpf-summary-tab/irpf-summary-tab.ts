@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +12,7 @@ import {
 } from '../../core/services/month-form.service';
 import { TAX_CONSTANTS } from '../../core/utils/constants';
 import { BenefitItem, BenefitsData, EmployeeData, SalaryData, SalaryItem } from '../../core/models/models';
+import { YearTabsService } from '../../core/services/year-tabs.service';
 
 @Component({
   standalone: true,
@@ -20,7 +21,8 @@ import { BenefitItem, BenefitsData, EmployeeData, SalaryData, SalaryItem } from 
   templateUrl: './irpf-summary-tab.html',
   styleUrl: './irpf-summary-tab.scss'
 })
-export class IrpfSummaryTabComponent implements OnInit {
+export class IrpfSummaryTabComponent implements OnInit, OnChanges {
+  @Input() year = new Date().getFullYear();
   salarioBruto = 0;
   otrosBeneficios = 0;
   irpfEstatalRows: IrpfEstatalRow[] = DEFAULT_IRPF_ESTATAL_ROWS.map(row => ({ ...row }));
@@ -70,11 +72,21 @@ export class IrpfSummaryTabComponent implements OnInit {
     target: null as (FloatingEditorTarget | null)
   };
 
-  constructor(private monthService: MonthFormService) {}
+  constructor(
+    private monthService: MonthFormService,
+    private yearTabsService: YearTabsService
+  ) {}
 
   ngOnInit(): void {
     this.loadState();
     this.refreshSummary();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['year'] && !changes['year'].firstChange) {
+      this.loadState();
+      this.refreshSummary();
+    }
   }
 
   get total(): number {
@@ -536,7 +548,7 @@ export class IrpfSummaryTabComponent implements OnInit {
     }
 
     return TAX_CONSTANTS.MONTHS.reduce((sum, month) => {
-      const saved = window.localStorage.getItem(`month-tab-state-${month}`);
+      const saved = window.localStorage.getItem(this.yearTabsService.getMonthStorageKey(this.year, month));
       if (!saved) {
         return sum;
       }
@@ -584,7 +596,7 @@ export class IrpfSummaryTabComponent implements OnInit {
     }
 
     return TAX_CONSTANTS.MONTHS.reduce((totals, month) => {
-      const saved = window.localStorage.getItem(`month-tab-state-${month}`);
+      const saved = window.localStorage.getItem(this.yearTabsService.getMonthStorageKey(this.year, month));
       if (!saved) {
         return totals;
       }
@@ -641,7 +653,7 @@ export class IrpfSummaryTabComponent implements OnInit {
     }
 
     return TAX_CONSTANTS.MONTHS.reduce((sum, month) => {
-      const saved = window.localStorage.getItem(`month-tab-state-${month}`);
+      const saved = window.localStorage.getItem(this.yearTabsService.getMonthStorageKey(this.year, month));
       if (!saved) {
         return sum;
       }
@@ -727,7 +739,7 @@ export class IrpfSummaryTabComponent implements OnInit {
     }
 
     try {
-      const saved = window.localStorage.getItem(IRPF_SUMMARY_STORAGE_KEY);
+      const saved = window.localStorage.getItem(this.yearTabsService.getSummaryStorageKey(this.year));
       if (!saved) {
         return;
       }
@@ -832,7 +844,7 @@ export class IrpfSummaryTabComponent implements OnInit {
     }
 
     try {
-      window.localStorage.setItem(IRPF_SUMMARY_STORAGE_KEY, JSON.stringify({
+      window.localStorage.setItem(this.yearTabsService.getSummaryStorageKey(this.year), JSON.stringify({
         otrosBeneficios: this.otrosBeneficios,
         irpfEstatalRows: this.irpfEstatalRows,
         irpfAutonomicoRows: this.irpfAutonomicoRows,
@@ -924,8 +936,6 @@ export class IrpfSummaryTabComponent implements OnInit {
     return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
   }
 }
-
-const IRPF_SUMMARY_STORAGE_KEY = 'irpf-summary-state';
 
 type SocialSecurityKey = 'desempleo' | 'formacionProfesional' | 'contingenciasComunes' | 'mei' | 'fogasa' | 'atPe';
 type SocialSecuritySide = 'employee' | 'company';

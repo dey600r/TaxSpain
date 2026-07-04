@@ -62,7 +62,7 @@ Tabla con 3 columnas: Concepto (fijo) | Precio/Hora (editable) | Devengos (autom
 ## Dependencias de salida
 - **TOTAL Columna 3** → alimenta Bruto en 15-monthly-summary.md
 - **TOTAL Columna 3** → alimenta Base Impuestos en 14-taxes-contributions.md
-- **TOTAL Columna 3** → alimenta Prorrata Extras en 15-monthly-summary.md
+- **Columna 3 de Sueldo Base, Antiguedad, PLUS Convenio, PLUS Voluntario, Pacto no competencia y Dedicación plena** → alimenta Prorrata Extras en 15-monthly-summary.md
 
 ## Casos borde
 1. Sueldo Base = 0 → Antiguedad = 0; Bruto = suma del resto

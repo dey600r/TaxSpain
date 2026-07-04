@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { DEFAULT_SOCIAL_SECURITY_PERCENTAGES, MonthFormService, SocialSecurityPercentages } from '../../core/services/month-form.service';
 import { TAX_CONSTANTS } from '../../core/utils/constants';
 import { EmployeeData, SalaryData, SalaryItem, BenefitsData, BenefitItem, TaxesData } from '../../core/models/models';
+import { YearTabsService } from '../../core/services/year-tabs.service';
 
 @Component({
   standalone: true,
@@ -25,8 +26,9 @@ import { EmployeeData, SalaryData, SalaryItem, BenefitsData, BenefitItem, TaxesD
   templateUrl: './month-tab.html',
   styleUrls: ['./month-tab.scss'],
 })
-export class MonthTabComponent implements OnInit {
+export class MonthTabComponent implements OnInit, OnChanges {
   @Input() monthName!: string;
+  @Input() year = new Date().getFullYear();
   isNominaOpen = false;
 
   duplicatePanel = {
@@ -112,15 +114,31 @@ export class MonthTabComponent implements OnInit {
   irpfExtraPercent = 0;
   neto = 0;
 
-  constructor(private monthService: MonthFormService) {}
+  constructor(
+    private monthService: MonthFormService,
+    private yearTabsService: YearTabsService
+  ) {}
 
   ngOnInit() {
     this.loadState();
     this.calculateAll();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['year'] && !changes['year'].firstChange) {
+      this.loadState();
+      this.calculateAll();
+    }
+  }
+
+  onNominaPanelOpened() {
+    this.isNominaOpen = true;
+    this.loadState();
+    this.calculateAll();
+  }
+
   get storageKey(): string {
-    return `month-tab-state-${this.monthName}`;
+    return this.yearTabsService.getMonthStorageKey(this.year, this.monthName);
   }
 
   calculateAll() {
@@ -271,7 +289,7 @@ export class MonthTabComponent implements OnInit {
       return;
     }
 
-    const sourceKey = `month-tab-state-${this.duplicatePanel.sourceMonth}`;
+    const sourceKey = this.yearTabsService.getMonthStorageKey(this.year, this.duplicatePanel.sourceMonth);
     const saved = window.localStorage.getItem(sourceKey);
     if (!saved) {
       this.closeDuplicatePanel();
@@ -293,7 +311,7 @@ export class MonthTabComponent implements OnInit {
     const bruto = this.salary.totalDevengos + this.benefits.totalDevengos;
     const deducciones = this.benefits.totalCalculados + this.taxes.totalDeduccionesEmpleado;
     const neto = bruto - deducciones;
-    const prorrataExtras = (this.salary.totalDevengos * this.employee.pagasextra) / 12;
+    const prorrataExtras = this.monthService.calculateProrrataExtras(this.salary, this.employee);
 
     this.resumenMensual = {
       bruto,
@@ -305,7 +323,7 @@ export class MonthTabComponent implements OnInit {
 
   private recalculateAcumulado() {
     const current = this.buildAcumuladoCalculos(this.taxes, this.resumenMensual.neto);
-    const previous = this.getPreviousMonthsAcumuladoSums();
+    const previous = this.getPreviousMonthAcumuladoTotals();
 
     this.acumuladoRows = [
       {
@@ -415,6 +433,43 @@ export class MonthTabComponent implements OnInit {
     };
   }
 
+  private getPreviousMonthAcumuladoTotals() {
+    const emptyTotals = {
+      imponibleIrpf: 0,
+      retencionesIrpf: 0,
+      cotizacionSsEmpleado: 0,
+      cotizacionSsEmpresa: 0,
+      recibido: 0
+    };
+
+    if (!this.isBrowser) {
+      return emptyTotals;
+    }
+
+    const currentIndex = TAX_CONSTANTS.MONTHS.indexOf(this.monthName);
+    if (currentIndex <= 0) {
+      return emptyTotals;
+    }
+
+    const previousMonth = TAX_CONSTANTS.MONTHS[currentIndex - 1];
+    const saved = window.localStorage.getItem(this.yearTabsService.getMonthStorageKey(this.year, previousMonth));
+    if (!saved) {
+      return emptyTotals;
+    }
+
+    try {
+      const parsed = JSON.parse(saved) as StoredMonthState;
+      if (parsed.acumuladoTotals) {
+        return parsed.acumuladoTotals;
+      }
+    } catch {
+      return emptyTotals;
+    }
+
+    // Compatibilidad con estados antiguos sin acumuladoTotals
+    return this.getPreviousMonthsAcumuladoSums();
+  }
+
   private getPreviousMonthsAcumuladoSums() {
     const totals = {
       imponibleIrpf: 0,
@@ -436,7 +491,7 @@ export class MonthTabComponent implements OnInit {
     const previousMonths = TAX_CONSTANTS.MONTHS.slice(0, currentIndex);
     const socialSecurityPercentages = this.getSocialSecurityPercentages();
     previousMonths.forEach(month => {
-      const saved = window.localStorage.getItem(`month-tab-state-${month}`);
+      const saved = window.localStorage.getItem(this.yearTabsService.getMonthStorageKey(this.year, month));
       if (!saved) {
         return;
       }
@@ -520,7 +575,7 @@ export class MonthTabComponent implements OnInit {
     }
 
     try {
-      const saved = window.localStorage.getItem(IRPF_SUMMARY_STORAGE_KEY);
+      const saved = window.localStorage.getItem(this.yearTabsService.getSummaryStorageKey(this.year));
       if (!saved) {
         return DEFAULT_SOCIAL_SECURITY_PERCENTAGES;
       }
@@ -659,7 +714,14 @@ export class MonthTabComponent implements OnInit {
           }))
         },
         irpfPercent: this.irpfPercent,
-        irpfExtraPercent: this.irpfExtraPercent
+        irpfExtraPercent: this.irpfExtraPercent,
+        acumuladoTotals: {
+          imponibleIrpf: this.acumuladoRows.find(row => row.concepto === 'Imponible IRPF')?.total ?? 0,
+          retencionesIrpf: this.acumuladoRows.find(row => row.concepto === 'Retenciones IRPF')?.total ?? 0,
+          cotizacionSsEmpleado: this.acumuladoRows.find(row => row.concepto === 'Cotizacion SS Empleado')?.total ?? 0,
+          cotizacionSsEmpresa: this.acumuladoRows.find(row => row.concepto === 'Cotizacion SS Empresa')?.total ?? 0,
+          recibido: this.acumuladoRows.find(row => row.concepto === 'Recibido')?.total ?? 0
+        }
       };
       window.localStorage.setItem(this.storageKey, JSON.stringify(state));
     } catch {
@@ -674,6 +736,12 @@ type StoredMonthState = {
   benefits?: { items: Array<Partial<BenefitItem> & { custom?: boolean }> };
   irpfPercent?: number;
   irpfExtraPercent?: number;
+  acumuladoTotals?: {
+    imponibleIrpf: number;
+    retencionesIrpf: number;
+    cotizacionSsEmpleado: number;
+    cotizacionSsEmpresa: number;
+    recibido: number;
+  };
 };
 
-const IRPF_SUMMARY_STORAGE_KEY = 'irpf-summary-state';

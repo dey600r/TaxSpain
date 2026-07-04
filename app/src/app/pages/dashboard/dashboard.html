@@ -1,17 +1,78 @@
 <div class="dashboard-container">
+  <div class="year-tabs-wrap">
+    <div class="year-tabs-list">
+      <div
+        class="year-tab"
+        *ngFor="let tab of yearTabs"
+        [class.active]="tab.id === activeYearTabId"
+      >
+        <ng-container *ngIf="editingYearTabId !== tab.id; else editYearInput">
+          <button
+            type="button"
+            class="year-tab-button"
+            (click)="setActiveTab(tab.id)"
+            [attr.aria-label]="'Seleccionar año ' + tab.year"
+          >
+            <span>{{ tab.year }}</span>
+          </button>
+        </ng-container>
+
+        <button
+          type="button"
+          class="year-tab-edit"
+          (click)="startEditYear(tab); $event.stopPropagation()"
+          aria-label="Editar año"
+          title="Editar año"
+        >
+          ✎
+        </button>
+
+        <button
+          type="button"
+          class="year-tab-delete"
+          (click)="removeYearTab(tab); $event.stopPropagation()"
+          [disabled]="yearTabs.length <= 1"
+          aria-label="Eliminar año"
+          title="Eliminar año"
+        >
+          ×
+        </button>
+
+        <ng-template #editYearInput>
+          <input
+            class="year-tab-input"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            [value]="pendingYearValue"
+            (input)="onYearInput($any($event.target).value)"
+            (blur)="saveEditedYear(tab)"
+            (keydown.enter)="saveEditedYear(tab)"
+            (keydown.escape)="cancelEditYear()"
+            aria-label="Editar año"
+          />
+        </ng-template>
+      </div>
+    </div>
+
+    <button type="button" class="year-add-tab" (click)="addYearFromActive()" aria-label="Añadir año" title="Añadir año">
+      +
+    </button>
+  </div>
+
   <mat-accordion>
     <mat-expansion-panel *ngFor="let month of months">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ month }}</mat-panel-title>
       </mat-expansion-panel-header>
-      <app-month-tab [monthName]="month"></app-month-tab>
+      <app-month-tab [monthName]="month" [year]="activeYear"></app-month-tab>
     </mat-expansion-panel>
 
     <mat-expansion-panel (opened)="summaryTab.refreshSummary()">
       <mat-expansion-panel-header>
         <mat-panel-title>Resumen</mat-panel-title>
       </mat-expansion-panel-header>
-      <app-irpf-summary-tab #summaryTab></app-irpf-summary-tab>
+      <app-irpf-summary-tab #summaryTab [year]="activeYear"></app-irpf-summary-tab>
     </mat-expansion-panel>
   </mat-accordion>
 </div>
