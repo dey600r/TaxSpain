@@ -15,12 +15,20 @@ Tabla con 4 columnas: Inicio | Fin | % | Impuestos
 | # | Inicio | Fin | % | Impuestos |
 |----|--------|-----|---|-----------|
 | 1 | editable (0) | editable (12.449,99) | editable (9,5%) | automático |
-| 2 | editable (12.450) | editable (20.199,99) | editable (12,00%) | automático |
-| 3 | editable (20.200) | editable (35.199,99) | editable (15,00%) | automático |
-| 4 | editable (35.200) | editable (59.999,99) | editable (18,50%) | automático |
-| 5 | editable (60.000) | editable (299.999,99) | editable (22,50%) | automático |
-| 6 | editable (300.000) | NO editable (null) | editable (24,50%) | automático |
+| 2 | **automático** (Fin fila 1 + 0,01) | editable (20.199,99) | editable (12,00%) | automático |
+| 3 | **automático** (Fin fila 2 + 0,01) | editable (35.199,99) | editable (15,00%) | automático |
+| 4 | **automático** (Fin fila 3 + 0,01) | editable (59.999,99) | editable (18,50%) | automático |
+| 5 | **automático** (Fin fila 4 + 0,01) | editable (299.999,99) | editable (22,50%) | automático |
+| 6 | **automático** (Fin fila 5 + 0,01) | NO editable (null) | editable (24,50%) | automático |
 | 7 | TOTAL | NO editable (null) | NO editable (null) | automático |
+
+### Fórmulas - Inicio (Columna 1)
+
+- Fila 1: editable por el usuario (valor inicial del primer tramo, normalmente 0).
+- Filas 2–6: **no editable**, se autocalcula como:
+  ```
+  Inicio fila N = Fin fila (N-1) + 0,01
+  ```
 
 ### Fórmulas - Impuestos (Columna 4)
 
@@ -58,12 +66,20 @@ Estructura idéntica a IRPF ESTATAL.
 | # | Inicio | Fin | % | Impuestos |
 |----|--------|-----|---|-----------|
 | 1 | editable (0) | editable (12.449,99) | editable (9,5%) | automático |
-| 2 | editable (12.450) | editable (20.199,99) | editable (12,00%) | automático |
-| 3 | editable (20.200) | editable (35.199,99) | editable (15,00%) | automático |
-| 4 | editable (35.200) | editable (59.999,99) | editable (18,50%) | automático |
-| 5 | editable (60.000) | editable (299.999,99) | editable (22,50%) | automático |
-| 6 | editable (300.000) | NO editable (null) | editable (24,50%) | automático |
+| 2 | **automático** (Fin fila 1 + 0,01) | editable (20.199,99) | editable (12,00%) | automático |
+| 3 | **automático** (Fin fila 2 + 0,01) | editable (35.199,99) | editable (15,00%) | automático |
+| 4 | **automático** (Fin fila 3 + 0,01) | editable (59.999,99) | editable (18,50%) | automático |
+| 5 | **automático** (Fin fila 4 + 0,01) | editable (299.999,99) | editable (22,50%) | automático |
+| 6 | **automático** (Fin fila 5 + 0,01) | NO editable (null) | editable (24,50%) | automático |
 | 7 | TOTAL | NO editable (null) | NO editable (null) | automático |
+
+### Fórmula - Inicio (Columna 1)
+
+- Fila 1: editable por el usuario.
+- Filas 2–6: **no editable**, se autocalcula como:
+  ```
+  Inicio fila N = Fin fila (N-1) + 0,01
+  ```
 
 ## Valores por defecto (España 2026 - Estatal)
 
@@ -79,7 +95,8 @@ Estos son los tramos fiscales estatales oficiales. Pueden variar por Comunidad A
 | 6 | >= 300.000 | — | 24,50% |
 
 ## Comportamiento UI
-- Columnas 1-3: editables
+- Columna 1 (Inicio): editable solo en fila 1; filas 2–6 son no editables y se autocalculan como Fin fila anterior + 0,01
+- Columnas 2-3 (Fin y %): editables
 - Columna 4 (Impuestos): no editable, calcula automáticamente
 - Fin de último tramo (fila 6) es null (sin límite superior)
 - TOTAL (fila 7) suma automáticamente

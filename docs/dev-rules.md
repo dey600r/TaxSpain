@@ -13,16 +13,8 @@
 - Las paginas deben ir en la carpeta /pages
 
 ## Estilo de código
-- Usar Angular 21
 - Nombres descriptivos (no abreviaturas)
 - Evitar duplicación de lógica
-
-## Estilos
-- Utilizar Angular material
-- Utilizar el tema blue de angular material
-- Utilizar fondo claro y card y tabs en gris claro
-- Las cards deben estar separadas por unos 20 px
-- En Resumen > Configuracion Renta y Renta, los titulos de las cards Seguridad Social y Resumen de nominas deben llevar padding-bottom de 10px para separarlos de la tabla
 
 ## Layout global
 - Crear un header fijo de 50 px de alto que permanezca visible durante el scroll

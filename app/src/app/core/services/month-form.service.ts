@@ -123,7 +123,6 @@ export class MonthFormService {
     benefits: BenefitsData,
     employee: EmployeeData,
     irpfPercent: number,
-    irpfExtraPercent: number,
     isExtra: boolean,
     socialSecurityPercentages: SocialSecurityPercentages = DEFAULT_SOCIAL_SECURITY_PERCENTAGES
   ): TaxesData {
@@ -192,14 +191,6 @@ export class MonthFormService {
         percentEmpresa: 0,
         empresa: 0
       },
-      {
-        concepto: 'IRPF EXTRA',
-        base: baseIRPF,
-        percentEmpleado: irpfExtraPercent / 100,
-        deduccionesEmpleado: 0,
-        percentEmpresa: 0,
-        empresa: 0
-      }
     ];
 
     // Calcular deducciones

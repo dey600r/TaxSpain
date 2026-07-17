@@ -33,7 +33,7 @@ Tabla con 3 columnas: Concepto | Cálculos (este mes) | Total (acumulado hasta e
 ### Cotización SS Empleado (Columna 2, fila 3)
 ```
 = TOTAL Impuestos Columna 4 de 14-taxes-contributions.md
-  - (Deducción IRPF + Deducción IRPF EXTRA)
+  - Deducción IRPF
 ```
 
 Solo SS, excluye IRPF.

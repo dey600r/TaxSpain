@@ -15,7 +15,7 @@ Tabla con 7 columnas: Concepto | Estatal € | Estatal % | Autonómico € | Aut
 | # | Concepto | Col2: Est. € | Col3: Est. % | Col4: Aut. € | Col5: Aut. % | Col6: Total € | Col7: Total % |
 |----|----------|-------------|------------|-------------|------------|-------------|------------|
 | 1 | Retención IRPF | automático | automático | automático | automático | automático | automático |
-| 2 | Retención Capital | 0 | 0 | 0 | 0 | 0 | 0 |
+| 2 | Retención Capital | automático | automático | automático | automático |
 | 3 | **CUOTAS LIQUIDAS** | automático | automático | automático | automático | automático | automático |
 
 ## Fórmulas
@@ -49,9 +49,30 @@ Validación: dividir por 0 → mostrar 0%.
 Validación: dividir por 0 → mostrar 0%.
 
 ### Retención Capital (fila 2)
+
+**Estatal € (Columna 2)**
 ```
-= 0 (no implementado en esta versión)
+= IMPUESTOS_RESUMEN (footer 2, 10-saving-base.md) / 2
 ```
+
+**Estatal % (Columna 3)**
+```
+= 0,19 / 2
+```
+
+Validación: dividir por 0 → mostrar 0%.
+
+**Autonómico € (Columna 4)**
+```
+= IMPUESTOS_RESUMEN (footer 2, 10-saving-base.md) / 2
+```
+
+**Autonómico % (Columna 5)**
+```
+= 0,19 / 2
+```
+
+Validación: dividir por 0 → mostrar 0%.
 
 ### CUOTAS LIQUIDAS (fila 3)
 

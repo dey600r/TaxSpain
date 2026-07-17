@@ -31,7 +31,7 @@ Tabla con 2 columnas: Concepto (fijo) | Base (automático)
   + TOTAL Impuestos Empleado Columna 4 de 14-taxes-contributions.md
 ```
 
-Incluye: SS empleado, IRPF, IRPF EXTRA, etc.
+Incluye: SS empleado, IRPF, etc.
 
 ### Neto (fila 3)
 ```

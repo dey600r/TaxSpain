@@ -52,6 +52,13 @@ Gestión de pestañas por año y aislamiento de datos por ejercicio fiscal.
 |---------|----------|
 | [31-years-tab.md](30-yearly/31-years-tab.md) | Pestañas de años: alta, edición, borrado y ordenación automática por año |
 
+### Área base del ahorro (40-savings-base/)
+Gestión de inversiones y cálculo fiscal asociado dentro del flujo anual.
+
+| Fichero | Propósito |
+|---------|----------|
+| [10-savings-base.mc](40-savings-base/10-savings-base.md) | Acordeón de inversiones tras Extra2, con tabla dinámica, totales e impuestos de base del ahorro |
+
 ## Orden de lectura recomendado
 1. Este fichero (orientación general)
 2. [31-years-tab.md](30-yearly/31-years-tab.md) (contexto de gestión por año y aislamiento entre ejercicios)
@@ -59,9 +66,11 @@ Gestión de pestañas por año y aislamiento de datos por ejercicio fiscal.
 4. [22-configuration-irpf-brackets.md](20-annual-summary/22-configuration-irpf-brackets.md) (tramos de IRPF)
 5. [11-employee-data.md](10-monthly/11-employee-data.md) hasta [17-partitions-chart.md](10-monthly/17-partitions-chart.md) (estructura repetible mensual)
 6. [23-annual-income-summary.md](20-annual-summary/23-annual-income-summary.md) hasta [26-final-tax-calculation.md](20-annual-summary/26-final-tax-calculation.md) (cálculos finales)
+7. [10-savings-base.mc](40-savings-base/41-savings-base.mc) (inversiones y fiscalidad de la base del ahorro)
 
 ## Reglas de sincronización
 - Si cambia una fórmula en área mensual, revisar que los acumulados (16) y resumen anual (23-26) siguen siendo coherentes.
 - Los porcentajes de SS (21) alimentan todas las nóminas mensuales (14).
 - Los tramos IRPF (22) se usan en resumen anual (26).
+- Las reglas de inversiones en base del ahorro (40) deben mantenerse separadas de la lógica de nómina mensual y anual general.
 - Si cambia la lógica de pestañas por año (31), validar que el aislamiento de estados por ejercicio sigue intacto para mensual y anual.

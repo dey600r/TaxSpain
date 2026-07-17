@@ -1,4 +1,4 @@
-import { Component, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { StorageTransferService } from './core/services/storage-transfer.service';
 
 @Component({
@@ -19,7 +20,8 @@ import { StorageTransferService } from './core/services/storage-transfer.service
     MatIconModule,
     MatListModule,
     MatSidenavModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -27,6 +29,7 @@ import { StorageTransferService } from './core/services/storage-transfer.service
 export class App {
   protected readonly title = signal('app');
   @ViewChild('appSidenav') appSidenav?: MatSidenav;
+  @ViewChild('storageImportInput') storageImportInput?: ElementRef<HTMLInputElement>;
 
   constructor(
     private storageTransferService: StorageTransferService,
@@ -39,6 +42,10 @@ export class App {
 
   closeMenu(): void {
     this.appSidenav?.close();
+  }
+
+  triggerImportInput(): void {
+    this.storageImportInput?.nativeElement.click();
   }
 
   exportStorage(): void {

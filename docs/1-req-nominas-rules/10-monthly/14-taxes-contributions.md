@@ -26,7 +26,6 @@ Tabla con 6 columnas: Concepto | Base | % Empleado | Deducción Empleado | % Emp
 | Concepto | Col2: Base | Col3: % Empl. | Col4: Deducción Empl. | Col5: % Empresa | Col6: Empresa |
 |----------|-----------|---|---|---|---|
 | IRPF | automático | **editable (default 22,22%)** | automático | vacío (no editable) | vacío (no editable) |
-| IRPF EXTRA | automático | **editable (default 0%)** | automático | vacío (no editable) | vacío (no editable) |
 | **TOTAL** | — | Σ(Col3) | Σ(Col4) | Σ(Col5) | Σ(Col6) |
 
 ## Fórmulas
@@ -72,7 +71,6 @@ Validaciones:
 ## Parámetros por defecto
 - Los porcentajes SS (Col3 y Col5) vienen de feature 21-configuration-social-security.md
 - IRPF default: 22,22% (editable en cada mes)
-- IRPF EXTRA default: 0% (editable en cada mes)
 - El usuario puede hacer override en esta tabla si es necesario
 
 ## Comportamiento UI
@@ -88,11 +86,9 @@ Validaciones:
 - **TOTAL Columna 6** → suma a SS Empresa en 16-accumulated.md
 - **IRPF Columna 2 (Base)** → usado en 16-accumulated.md (Imponible IRPF)
 - **IRPF Columna 4 (Deducción)** → usado en 16-accumulated.md (Retenciones IRPF)
-- **IRPF EXTRA Columna 4** → usado en cálculo de Cotización SS Empleado en 16-accumulated.md
 
 ## Casos borde
 1. Base = 0 → todas las deducciones = 0
 2. % = 0 → deducción = 0
 3. División por cero (#DIV/0) → mostrar 0 en UI, nunca error
 4. IRPF % puede ser 0 en meses intermedios (si el % anual se reparte diferente)
-5. IRPF EXTRA suele ser 0 excepto en Extra1 y Extra2

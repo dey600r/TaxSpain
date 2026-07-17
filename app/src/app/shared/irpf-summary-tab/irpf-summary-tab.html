@@ -77,18 +77,21 @@
             <tbody>
               <tr *ngFor="let row of irpfEstatalRows; let index = index">
                 <td>
-                  <div class="editable-cell">
-                    <span>{{ row.inicio | number:'1.2-2' }}</span>
-                    <button
-                      mat-icon-button
-                      class="inline-edit"
-                      (click)="openIrpfEstatalEditor(index, 'inicio')"
-                      aria-label="Editar inicio del tramo"
-                      title="Editar inicio del tramo"
-                    >
-                      ✎
-                    </button>
-                  </div>
+                  <ng-container *ngIf="index === 0; else irpfEstatalInicioNoEditable">
+                    <div class="editable-cell">
+                      <span>{{ row.inicio | number:'1.2-2' }}</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="openIrpfEstatalEditor(index, 'inicio')"
+                        aria-label="Editar inicio del tramo"
+                        title="Editar inicio del tramo"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #irpfEstatalInicioNoEditable>{{ row.inicio | number:'1.2-2' }}</ng-template>
                 </td>
                 <td>
                   <ng-container *ngIf="row.fin !== null; else irpfEstatalFinNoEditable">
@@ -154,18 +157,21 @@
             <tbody>
               <tr *ngFor="let row of irpfAutonomicoRows; let index = index">
                 <td>
-                  <div class="editable-cell">
-                    <span>{{ row.inicio | number:'1.2-2' }}</span>
-                    <button
-                      mat-icon-button
-                      class="inline-edit"
-                      (click)="openIrpfAutonomicoEditor(index, 'inicio')"
-                      aria-label="Editar inicio del tramo autonomico"
-                      title="Editar inicio del tramo autonomico"
-                    >
-                      ✎
-                    </button>
-                  </div>
+                  <ng-container *ngIf="index === 0; else irpfAutonomicoInicioNoEditable">
+                    <div class="editable-cell">
+                      <span>{{ row.inicio | number:'1.2-2' }}</span>
+                      <button
+                        mat-icon-button
+                        class="inline-edit"
+                        (click)="openIrpfAutonomicoEditor(index, 'inicio')"
+                        aria-label="Editar inicio del tramo autonomico"
+                        title="Editar inicio del tramo autonomico"
+                      >
+                        ✎
+                      </button>
+                    </div>
+                  </ng-container>
+                  <ng-template #irpfAutonomicoInicioNoEditable>{{ row.inicio | number:'1.2-2' }}</ng-template>
                 </td>
                 <td>
                   <ng-container *ngIf="row.fin !== null; else irpfAutonomicoFinNoEditable">

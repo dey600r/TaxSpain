@@ -47,7 +47,7 @@ Validación: dividir por 0 → mostrar 0%.
 
 **PAGADO € (Columna 2)**
 ```
-= 0 (no implementado en esta versión)
+= TOTAL_IMPUESTOS_ESPANA (footer 1 en 10-savings-base.md)
 ```
 
 **PAGADO % (Columna 3)**

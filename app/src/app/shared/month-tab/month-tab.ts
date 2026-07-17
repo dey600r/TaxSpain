@@ -55,7 +55,7 @@ export class MonthTabComponent implements OnInit, OnChanges {
 
   floatingEditor = {
     isOpen: false,
-    target: '' as 'salaryConcept' | 'salaryPrecioHora' | 'benefitConcept' | 'benefitDevengos' | 'irpfPercent' | 'irpfExtraPercent' | '',
+    target: '' as 'salaryConcept' | 'salaryPrecioHora' | 'benefitConcept' | 'benefitDevengos' | 'irpfPercent' | '',
     rowIndex: -1,
     label: '',
     inputType: 'number' as 'text' | 'number',
@@ -111,7 +111,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
   };
 
   irpfPercent = TAX_CONSTANTS.DEFAULTS.IRPF_PERCENT;
-  irpfExtraPercent = 0;
   neto = 0;
 
   constructor(
@@ -151,7 +150,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
       this.benefits,
       this.employee,
       this.irpfPercent,
-      this.irpfExtraPercent,
       isExtra,
       socialSecurityPercentages
     );
@@ -199,7 +197,7 @@ export class MonthTabComponent implements OnInit, OnChanges {
   }
 
   openFloatingEditor(
-    target: 'salaryConcept' | 'salaryPrecioHora' | 'benefitConcept' | 'benefitDevengos' | 'irpfPercent' | 'irpfExtraPercent',
+    target: 'salaryConcept' | 'salaryPrecioHora' | 'benefitConcept' | 'benefitDevengos' | 'irpfPercent',
     label: string,
     value: string | number,
     inputType: 'text' | 'number',
@@ -248,13 +246,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
       const parsed = Number(value);
       if (!Number.isNaN(parsed)) {
         this.irpfPercent = parsed;
-      }
-    }
-
-    if (target === 'irpfExtraPercent') {
-      const parsed = Number(value);
-      if (!Number.isNaN(parsed)) {
-        this.irpfExtraPercent = parsed;
       }
     }
 
@@ -420,14 +411,12 @@ export class MonthTabComponent implements OnInit, OnChanges {
 
   private buildAcumuladoCalculos(taxes: TaxesData, neto: number) {
     const irpf = taxes.items.find(item => item.concepto === 'IRPF');
-    const irpfExtra = taxes.items.find(item => item.concepto === 'IRPF EXTRA');
     const irpfDeducciones = irpf?.deduccionesEmpleado ?? 0;
-    const irpfExtraDeducciones = irpfExtra?.deduccionesEmpleado ?? 0;
 
     return {
       imponibleIrpf: irpf?.base ?? 0,
       retencionesIrpf: irpfDeducciones,
-      cotizacionSsEmpleado: taxes.totalDeduccionesEmpleado - (irpfDeducciones + irpfExtraDeducciones),
+      cotizacionSsEmpleado: taxes.totalDeduccionesEmpleado - irpfDeducciones,
       cotizacionSsEmpresa: taxes.totalEmpresa,
       recibido: neto
     };
@@ -502,7 +491,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
           salary?: { items: Array<Partial<SalaryItem> & { custom?: boolean }> };
           benefits?: { items: Array<Partial<BenefitItem> & { custom?: boolean }> };
           irpfPercent?: number;
-          irpfExtraPercent?: number;
         };
 
         const employee: EmployeeData = parsed.employee ?? {
@@ -536,7 +524,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
         }
 
         const irpfPercent = typeof parsed.irpfPercent === 'number' ? parsed.irpfPercent : TAX_CONSTANTS.DEFAULTS.IRPF_PERCENT;
-        const irpfExtraPercent = typeof parsed.irpfExtraPercent === 'number' ? parsed.irpfExtraPercent : 0;
         const salaryCalculated = this.monthService.calculateSalaryDevengos(salary, employee);
         const benefitsCalculated = this.monthService.calculateBenefits(benefits, employee);
         const taxesCalculated = this.monthService.calculateTaxes(
@@ -544,7 +531,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
           benefitsCalculated,
           employee,
           irpfPercent,
-          irpfExtraPercent,
           month.includes('Extra'),
           socialSecurityPercentages
         );
@@ -667,10 +653,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
     if (typeof parsed.irpfPercent === 'number') {
       this.irpfPercent = parsed.irpfPercent;
     }
-
-    if (typeof parsed.irpfExtraPercent === 'number') {
-      this.irpfExtraPercent = parsed.irpfExtraPercent;
-    }
   }
 
   private loadState() {
@@ -714,7 +696,6 @@ export class MonthTabComponent implements OnInit, OnChanges {
           }))
         },
         irpfPercent: this.irpfPercent,
-        irpfExtraPercent: this.irpfExtraPercent,
         acumuladoTotals: {
           imponibleIrpf: this.acumuladoRows.find(row => row.concepto === 'Imponible IRPF')?.total ?? 0,
           retencionesIrpf: this.acumuladoRows.find(row => row.concepto === 'Retenciones IRPF')?.total ?? 0,
@@ -735,7 +716,6 @@ type StoredMonthState = {
   salary?: { items: Array<Partial<SalaryItem> & { custom?: boolean }> };
   benefits?: { items: Array<Partial<BenefitItem> & { custom?: boolean }> };
   irpfPercent?: number;
-  irpfExtraPercent?: number;
   acumuladoTotals?: {
     imponibleIrpf: number;
     retencionesIrpf: number;

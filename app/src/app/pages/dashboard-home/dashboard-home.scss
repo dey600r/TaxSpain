@@ -1,7 +1,12 @@
 .dashboard-home {
   padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.dashboard-home mat-card {
-  max-width: 640px;
+@media (max-width: 768px) {
+  .dashboard-home {
+    padding: 12px;
+  }
 }

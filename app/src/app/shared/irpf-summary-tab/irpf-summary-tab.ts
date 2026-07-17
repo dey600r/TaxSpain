@@ -423,6 +423,9 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
   }
 
   openIrpfEstatalEditor(rowIndex: number, field: IrpfEstatalField): void {
+    if (field === 'inicio' && rowIndex > 0) {
+      return;
+    }
     const row = this.irpfEstatalRows[rowIndex];
     if (!row) {
       return;
@@ -442,6 +445,9 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
   }
 
   openIrpfAutonomicoEditor(rowIndex: number, field: IrpfAutonomicoField): void {
+    if (field === 'inicio' && rowIndex > 0) {
+      return;
+    }
     const row = this.irpfAutonomicoRows[rowIndex];
     if (!row) {
       return;
@@ -512,6 +518,7 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
       const row = this.irpfEstatalRows[rowIndex];
       if (row) {
         row[field] = this.normalizeAmount(value);
+        this.syncIrpfInicio(this.irpfEstatalRows);
         this.saveState();
       }
     }
@@ -521,6 +528,7 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
       const row = this.irpfAutonomicoRows[rowIndex];
       if (row) {
         row[field] = this.normalizeAmount(value);
+        this.syncIrpfInicio(this.irpfAutonomicoRows);
         this.saveState();
       }
     }
@@ -566,9 +574,6 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
         const irpfPercent = typeof parsed.irpfPercent === 'number'
           ? parsed.irpfPercent
           : TAX_CONSTANTS.DEFAULTS.IRPF_PERCENT;
-        const irpfExtraPercent = typeof parsed.irpfExtraPercent === 'number'
-          ? parsed.irpfExtraPercent
-          : 0;
 
         const salaryCalculated = this.monthService.calculateSalaryDevengos(salary, employee);
         const benefitsCalculated = this.monthService.calculateBenefits(benefits, employee);
@@ -577,7 +582,6 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
           benefitsCalculated,
           employee,
           irpfPercent,
-          irpfExtraPercent,
           month.includes('Extra'),
           this.getSocialSecurityPercentagesDecimal()
         );
@@ -614,9 +618,6 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
         const irpfPercent = typeof parsed.irpfPercent === 'number'
           ? parsed.irpfPercent
           : TAX_CONSTANTS.DEFAULTS.IRPF_PERCENT;
-        const irpfExtraPercent = typeof parsed.irpfExtraPercent === 'number'
-          ? parsed.irpfExtraPercent
-          : 0;
 
         const salaryCalculated = this.monthService.calculateSalaryDevengos(salary, employee);
         const benefitsCalculated = this.monthService.calculateBenefits(benefits, employee);
@@ -625,7 +626,6 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
           benefitsCalculated,
           employee,
           irpfPercent,
-          irpfExtraPercent,
           month.includes('Extra'),
           this.getSocialSecurityPercentagesDecimal()
         );
@@ -671,9 +671,6 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
         const irpfPercent = typeof parsed.irpfPercent === 'number'
           ? parsed.irpfPercent
           : TAX_CONSTANTS.DEFAULTS.IRPF_PERCENT;
-        const irpfExtraPercent = typeof parsed.irpfExtraPercent === 'number'
-          ? parsed.irpfExtraPercent
-          : 0;
 
         const salaryCalculated = this.monthService.calculateSalaryDevengos(salary, employee);
         const benefitsCalculated = this.monthService.calculateBenefits(benefits, employee);
@@ -682,7 +679,6 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
           benefitsCalculated,
           employee,
           irpfPercent,
-          irpfExtraPercent,
           month.includes('Extra'),
           this.getSocialSecurityPercentagesDecimal()
         );
@@ -786,6 +782,7 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
             impuestos: 0
           };
         });
+        this.syncIrpfInicio(this.irpfEstatalRows);
       }
 
       if (Array.isArray(parsed.irpfAutonomicoRows)) {
@@ -800,6 +797,7 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
             impuestos: 0
           };
         });
+        this.syncIrpfInicio(this.irpfAutonomicoRows);
       }
 
       if (Array.isArray(parsed.baseCotizacionEstatal)) {
@@ -901,6 +899,15 @@ export class IrpfSummaryTabComponent implements OnInit, OnChanges {
     return value * 100;
   }
 
+  private syncIrpfInicio(rows: Array<{ inicio: number; fin: number | null }>): void {
+    for (let i = 1; i < rows.length; i++) {
+      const prevFin = rows[i - 1].fin;
+      if (prevFin !== null) {
+        rows[i].inicio = this.normalizeAmount(prevFin + 0.01);
+      }
+    }
+  }
+
   private calculateIrpfImpuestoForRow(
     rows: Array<{ inicio: number; porcentaje: number | null; impuestos?: number }>,
     index: number,
@@ -998,5 +1005,4 @@ type StoredMonthState = {
   salary?: { items: Array<Partial<SalaryItem> & { custom?: boolean }> };
   benefits?: { items: Array<Partial<BenefitItem> & { custom?: boolean }> };
   irpfPercent?: number;
-  irpfExtraPercent?: number;
 };

@@ -12,10 +12,15 @@
 	<h1>TaxSpain Dashboard</h1>
 
 	<div class="header-actions">
-		<button mat-stroked-button type="button" (click)="exportStorage()">Exportar JSON</button>
+		<button mat-icon-button type="button" (click)="exportStorage()" matTooltip="Exportar" aria-label="Exportar">
+			<mat-icon>download</mat-icon>
+		</button>
 
-		<label class="import-label" for="storage-import-input">Importar JSON</label>
+		<button mat-icon-button type="button" (click)="triggerImportInput()" matTooltip="Importar" aria-label="Importar">
+			<mat-icon>upload</mat-icon>
+		</button>
 		<input
+			#storageImportInput
 			id="storage-import-input"
 			class="import-input"
 			type="file"
